@@ -6,9 +6,11 @@ import React, { useEffect, useState } from "react";
 
 function App() {
   const [value, setValue] = useState("Hello World!");
-  const [messages, setMessages] = useState(["hello"]);
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState({});
   const [ipfs, setIpfs] = useState(null);
   const [web3, setWeb3] = useState(null);
+  const [username, setUsername] = useState("");
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
@@ -41,25 +43,46 @@ function App() {
       }
 
       function echo(msg) {
-        setValue(Buffer(msg.data).toString());
+        const d = new Date();
+        let time = d.getTime();
+        if (Buffer(msg.data).toString().length) {
+          setMessage({ message: Buffer(msg.data).toString(), time });
+        }
       }
 
       await _ipfs.pubsub.subscribe("example_topic", echo);
-      await _ipfs.pubsub.publish("example_topic", "Hello world!");
     })();
   }, []);
 
   useEffect(() => {
-    console.log("YEEASS");
     (async () => {
       if (web3) {
         setAccount((await web3.eth.getAccounts())[0]);
+        setUsername((await web3.eth.getAccounts())[0]);
       }
     })();
   }, [web3]);
 
-  const onChange = async (event) => {
-    await ipfs.pubsub.publish("example_topic", event.target.value);
+  useEffect(() => {
+    (async () => {
+      if (message.message) {
+        setMessages([...messages, message.message]);
+      }
+    })();
+  }, [message]);
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const handleChangeUsername = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // setMessages([...messages, value]);
+    await ipfs.pubsub.publish("example_topic", `${username}: ` + value);
   };
 
   return (
@@ -71,20 +94,31 @@ function App() {
         </p>
         <p>{account}</p>
         <ul>
-          {messages.map((message) => {
+          {messages.map((message, key) => {
             return (
-              <li>
-                <h2>{message}</h2>
+              <li key={key}>
+                <p>{message}</p>
               </li>
             );
           })}
         </ul>
-        <textarea
-          style={{ width: "100%", height: "500px" }}
-          id="textfield"
-          onChange={onChange}
-          value={value}
-        ></textarea>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input
+              type="text"
+              value={username}
+              onChange={handleChangeUsername}
+            />
+          </label>
+          <textarea
+            style={{ width: "100%", height: "500px" }}
+            id="textfield"
+            onChange={handleChange}
+            value={value}
+          ></textarea>
+          <button>Send message</button>
+        </form>
       </header>
     </div>
   );
