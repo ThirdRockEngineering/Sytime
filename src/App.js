@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 
 function App() {
   const [value, setValue] = useState("Hello World!");
+  const [messages, setMessages] = useState(["hello"]);
   const [ipfs, setIpfs] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(
@@ -69,6 +70,15 @@ function App() {
           Simple test <code>ipfs-pubsub</code> with changing doc.
         </p>
         <p>{account}</p>
+        <ul>
+          {messages.map((message) => {
+            return (
+              <li>
+                <h2>{message}</h2>
+              </li>
+            );
+          })}
+        </ul>
         <textarea
           style={{ width: "100%", height: "500px" }}
           id="textfield"
