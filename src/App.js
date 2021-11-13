@@ -96,9 +96,9 @@ function App() {
         <ul>
           {messages.map((message, key) => {
             return (
-              <li key={key}>
+              <div key={key}>
                 <p>{message}</p>
-              </li>
+              </div>
             );
           })}
         </ul>
