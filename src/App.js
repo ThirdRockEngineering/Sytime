@@ -11,6 +11,7 @@ function App() {
   const [ipfs, setIpfs] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [username, setUsername] = useState("");
+  const [peers, setPeers] = useState([]);
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
@@ -23,7 +24,8 @@ function App() {
       const _ipfs = await node;
       setIpfs(await _ipfs);
       setWeb3(await _web3);
-      function echo(msg) {
+
+      async function echo(msg) {
         const d = new Date();
         let time = d.getTime();
         if (Buffer(msg.data).toString().length) {
@@ -35,6 +37,7 @@ function App() {
             time,
           });
         }
+        setPeers([...peers, await _ipfs.pubsub.peers("example_topic")]);
       }
 
       await _ipfs.pubsub.subscribe("example_topic", echo);
@@ -89,21 +92,38 @@ function App() {
         <p>
           Simple test <code>ipfs-pubsub</code> with changing doc.
         </p>
-        <p>{account}</p>
-        <ul>
-          {messages.map((message, key) => {
-            return (
-              <div key={key}>
-                <p>
-                  <span style={{ color: `#${message.color}` }}>
-                    {message.username}
-                  </span>
-                  : {message.message}
-                </p>
-              </div>
-            );
-          })}
-        </ul>
+        <p>Your wallet: {account}</p>
+
+        <div style={{ display: "flex" }}>
+          <div>
+            <h3>Messages</h3>
+            <ul>
+              {messages.map((message, key) => {
+                return (
+                  <div key={key}>
+                    <span style={{ color: `#${message.color}` }}>
+                      {message.username}
+                    </span>
+                    : {message.message}
+                  </div>
+                );
+              })}
+            </ul>
+          </div>
+          <div>
+            <h3>Peers</h3>
+            <ul>
+              {peers.map((peer, key) => {
+                return (
+                  <div key={key} style={{ fontSize: "15px" }}>
+                    {peer}
+                  </div>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <label>
             Name:
