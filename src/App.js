@@ -14,18 +14,26 @@ function App() {
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
+  const [color, setColor] = useState(
+    Math.floor(Math.random() * 16777215).toString(16)
+  );
 
   useEffect(() => {
     (async () => {
       const _ipfs = await node;
       setIpfs(await _ipfs);
       setWeb3(await _web3);
-
       function echo(msg) {
         const d = new Date();
         let time = d.getTime();
         if (Buffer(msg.data).toString().length) {
-          setMessage({ message: Buffer(msg.data).toString(), time });
+          const message = JSON.parse(Buffer(msg.data).toString());
+          setMessage({
+            username: message.username,
+            message: message.value,
+            color: message.color,
+            time,
+          });
         }
       }
 
@@ -45,7 +53,14 @@ function App() {
   useEffect(() => {
     (async () => {
       if (message.message) {
-        setMessages([...messages, message.message]);
+        setMessages([
+          ...messages,
+          {
+            message: message.message,
+            username: message.username,
+            color: message.color,
+          },
+        ]);
       }
     })();
   }, [message]);
@@ -61,7 +76,10 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // setMessages([...messages, value]);
-    await ipfs.pubsub.publish("example_topic", `${username}: ` + value);
+    await ipfs.pubsub.publish(
+      "example_topic",
+      JSON.stringify({ username, value, color })
+    );
   };
 
   return (
@@ -76,7 +94,12 @@ function App() {
           {messages.map((message, key) => {
             return (
               <div key={key}>
-                <p>{message}</p>
+                <p>
+                  <span style={{ color: `#${message.color}` }}>
+                    {message.username}
+                  </span>
+                  : {message.message}
+                </p>
               </div>
             );
           })}
