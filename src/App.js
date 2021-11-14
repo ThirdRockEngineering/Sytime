@@ -68,6 +68,7 @@ function App() {
         //* I know - it's bad sync all peers every time message is thrown
         //* It's just for now
         setPeers([...peers, await _ipfs.pubsub.peers("example_topic")]);
+        //* It will not display you on your end (idk why)
       }
 
       //* Subscribe your browser to topic
