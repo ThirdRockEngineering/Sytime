@@ -1,5 +1,6 @@
 import Web3 from "web3";
 
+//* Here we have async funtcion
 const main = async () => {
   // https://ethereum.stackexchange.com/questions/67145/how-to-connect-web3-with-metamask
   if (window.ethereum) {
@@ -22,4 +23,6 @@ const main = async () => {
   }
 };
 
+//* We will return just promise in any case - we have to await it in
+//* App component. I dunno better way to do that :(
 export default main();
