@@ -3,7 +3,11 @@ import React, { useState, useEffect } from "react";
 const Peer = (props) => {
   const { peer, self, ipfs } = props;
 
-  function connectWithPeer() {}
+  async function connectWithPeer() {
+    await ipfs.pubsub.subscribe(peer, () => {
+      console.log(self);
+    });
+  }
 
   return (
     <div>
