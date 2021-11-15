@@ -1,6 +1,7 @@
 import img from "../public/image.png";
 import "../public/CSS/App.css";
 import Peer from "./User/Peer";
+import Channel from "./Chat/Channel";
 import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 //* node and _web3 is promises now, because we can't
@@ -34,7 +35,8 @@ function App() {
   //* List of connected peers
   const [peers, setPeers] = useState([]);
   const [id, setId] = useState("");
-
+  const [channel, setChannel] = useState("example_topic");
+  const [channels, setChannels] = useState([]);
   //* Ethereum wallet
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
@@ -80,18 +82,20 @@ function App() {
 
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
+      setChannels(await _ipfs.pubsub.ls());
     })();
   }, []);
   useEffect(() => {
     (async () => {
       if (ipfs && id.length) {
-        await ipfs.pubsub.subscribe(id, (msg) => {
+        await ipfs.pubsub.subscribe(`${id}`, (msg) => {
           if (Buffer(msg.data).toString().length) {
             //* We are storing stringified JSON in message
             const message = Buffer(msg.data).toString();
             console.log(message);
           }
         });
+        setChannels(await ipfs.pubsub.ls());
       }
     })();
   }, [ipfs, id]);
@@ -99,8 +103,10 @@ function App() {
   useEffect(() => {
     (async () => {
       if (web3) {
-        setAccount((await web3.eth.getAccounts())[0]);
-        setUsername((await web3.eth.getAccounts())[0]);
+        const acc = (await web3.eth.getAccounts())[0];
+        setAccount(acc);
+        // console.log((await web3.eth.getAccounts())[0].slice(0, 3));
+        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
       }
     })();
   }, [web3]);
@@ -140,7 +146,6 @@ function App() {
     );
   };
 
-  console.log(peers);
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -173,6 +178,18 @@ function App() {
               return (
                 <div key={key}>
                   <Peer peer={peer} self={id} ipfs={ipfs} />
+                </div>
+              );
+            })}
+          </ul>
+        </div>
+        <div>
+          <h3>Channels</h3>
+          <ul>
+            {channels.map((channel, key) => {
+              return (
+                <div key={key}>
+                  <Channel channel={channel} self={id} ipfs={ipfs} />
                 </div>
               );
             })}
