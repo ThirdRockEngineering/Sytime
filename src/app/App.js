@@ -28,6 +28,7 @@ function App() {
 
   //* List of connected peers
   const [peers, setPeers] = useState([]);
+  const [id, setId] = useState("");
 
   //* Ethereum wallet
   const [account, setAccount] = useState(
@@ -46,6 +47,7 @@ function App() {
       //* setting global state
       setIpfs(await _ipfs);
       setWeb3(await _web3);
+      setId((await _ipfs.id()).id);
 
       //* callback that calls every time a message thrown in chat
       async function echo(msg) {
@@ -67,7 +69,7 @@ function App() {
 
         //* I know - it's bad sync all peers every time message is thrown
         //* It's just for now
-        setPeers([...peers, await _ipfs.pubsub.peers("example_topic")]);
+        setPeers([...peers, (await _ipfs.pubsub.peers("example_topic"))[0]]);
         //* It will not display you on your end (idk why)
       }
 
@@ -121,63 +123,59 @@ function App() {
     );
   };
 
+  console.log(peers);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={img} className="App-logo" alt="logo" />
-        <p>
-          Simple test <code>ipfs-pubsub</code> with changing doc.
-        </p>
-        <p>Your wallet: {account}</p>
-
-        <div style={{ display: "flex" }}>
-          <div>
-            <h3>Messages</h3>
-            <ul>
-              {messages.map((message, key) => {
-                return (
-                  <div key={key}>
-                    <span style={{ color: `#${message.color}` }}>
-                      {message.username}
-                    </span>
-                    : {message.message}
-                  </div>
-                );
-              })}
-            </ul>
-          </div>
-          <div>
-            <h3>Peers</h3>
-            <ul>
-              {peers.map((peer, key) => {
-                return (
-                  <div key={key} style={{ fontSize: "15px" }}>
-                    {peer}
-                  </div>
-                );
-              })}
-            </ul>
-          </div>
+      <img src={img} className="App-logo" alt="logo" />
+      <p>
+        Simple test <code>ipfs-pubsub</code> with changing doc.
+      </p>
+      <p>Your wallet: {account}</p>
+      <p>Your peer id: {id}</p>
+      {/* <h1>{me}</h1> */}
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div>
+          <h3>Messages</h3>
+          <ul>
+            {messages.map((message, key) => {
+              return (
+                <div key={key}>
+                  <span style={{ color: `#${message.color}` }}>
+                    {message.username}
+                  </span>
+                  : {message.message}
+                </div>
+              );
+            })}
+          </ul>
         </div>
+        <div>
+          <h3>Peers</h3>
+          <ul>
+            {peers.map((peer, key) => {
+              return (
+                <div key={key}>
+                  <p style={{ fontSize: "15px" }}>{peer}</p>
+                </div>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={username}
-              onChange={handleChangeUsername}
-            />
-          </label>
-          <textarea
-            style={{ width: "100%", height: "500px" }}
-            id="textfield"
-            onChange={handleChange}
-            value={value}
-          ></textarea>
-          <button>Send message</button>
-        </form>
-      </header>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={username} onChange={handleChangeUsername} />
+        </label>
+        <textarea
+          style={{ width: "100%", height: "500px" }}
+          id="textfield"
+          onChange={handleChange}
+          value={value}
+        ></textarea>
+        <button>Send message</button>
+      </form>
     </div>
   );
 }
