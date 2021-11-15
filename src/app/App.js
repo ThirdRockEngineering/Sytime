@@ -74,7 +74,7 @@ function App() {
 
         //* I know - it's bad sync all peers every time message is thrown
         //* It's just for now
-        setPeers([...peers, (await _ipfs.pubsub.peers("example_topic"))[0]]);
+        setPeers(await _ipfs.pubsub.peers("example_topic"));
         //* It will not display you on your end (idk why)
       }
 
@@ -84,9 +84,13 @@ function App() {
   }, []);
   useEffect(() => {
     (async () => {
-      if (ipfs && id) {
-        await ipfs.pubsub.subscribe(id, () => {
-          console.log("something");
+      if (ipfs && id.length) {
+        await ipfs.pubsub.subscribe(id, (msg) => {
+          if (Buffer(msg.data).toString().length) {
+            //* We are storing stringified JSON in message
+            const message = Buffer(msg.data).toString();
+            console.log(message);
+          }
         });
       }
     })();
