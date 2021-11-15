@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./public/CSS/index.css";
 import App from "./app/App";
-import reportWebVitals from "./reportWebVitals";
+import reportWebVitals from "./testing_reporting/reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
