@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 
 const Peer = (props) => {
-  const { peer } = props;
+  const { peer, self, ipfs } = props;
 
-  return <div>{peer}</div>;
+  function connectWithPeer() {}
+
+  return (
+    <div>
+      <button onClick={connectWithPeer}>{peer}</button>
+    </div>
+  );
 };
 
 export default Peer;

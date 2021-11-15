@@ -1,5 +1,7 @@
 import img from "../public/image.png";
 import "../public/CSS/App.css";
+import Peer from "./User/Peer";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 //* node and _web3 is promises now, because we can't
 //* await them in different file :(
@@ -9,6 +11,9 @@ import _web3 from "../decent_network/getWeb3";
 import React, { useEffect, useState } from "react";
 
 function App() {
+  //^ Promise Tracker Attempt
+
+  const { promiseInProgress } = usePromiseTracker(node);
   //* Current message that displays in textarea
   const [value, setValue] = useState("Hello World!");
 
@@ -77,7 +82,15 @@ function App() {
       await _ipfs.pubsub.subscribe("example_topic", echo);
     })();
   }, []);
-
+  useEffect(() => {
+    (async () => {
+      if (ipfs && id) {
+        await ipfs.pubsub.subscribe(id, () => {
+          console.log("something");
+        });
+      }
+    })();
+  }, [ipfs, id]);
   //* Setting up Ethereum wallet
   useEffect(() => {
     (async () => {
@@ -155,7 +168,7 @@ function App() {
             {peers.map((peer, key) => {
               return (
                 <div key={key}>
-                  <p style={{ fontSize: "15px" }}>{peer}</p>
+                  <Peer peer={peer} self={id} ipfs={ipfs} />
                 </div>
               );
             })}
