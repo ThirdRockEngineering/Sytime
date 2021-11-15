@@ -1,11 +1,11 @@
-import img from "./image.png";
-import "./App.css";
+import img from "../public/image.png";
+import "../public/CSS/App.css";
 
 //* node and _web3 is promises now, because we can't
 //* await them in different file :(
 //* check getWeb3.js and ipfs.js
-import node from "./ipfs";
-import _web3 from "./getWeb3";
+import node from "../decent_network/ipfs";
+import _web3 from "../decent_network/getWeb3";
 import React, { useEffect, useState } from "react";
 
 function App() {
