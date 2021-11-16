@@ -25,7 +25,12 @@ function App() {
   const [message, setMessage] = useState({});
 
   //* ipfs node
-  const [ipfs, setIpfs] = useState(null);
+  const [ipfs, setIpfs] = useState(
+    null
+    // (() => {
+    //   (async () => await node)();
+    // })()
+  );
 
   //* connection to wallet via web3
   const [web3, setWeb3] = useState(null);
@@ -48,7 +53,6 @@ function App() {
   );
 
   function echo(msg) {
-    console.log(msg);
     const d = new Date();
     let time = d.getTime();
 
@@ -57,7 +61,6 @@ function App() {
       //* We are storing stringified JSON in message
       const message = JSON.parse(Buffer(msg.data).toString());
       //* Change message from state
-      console.log(message.channel);
       setMessage({
         username: message.username,
         message: message.value,
@@ -87,7 +90,15 @@ function App() {
   useEffect(() => {
     (async () => {
       if (ipfs && id.length) {
-        await ipfs.pubsub.subscribe(`${id}`, echo);
+        await ipfs.pubsub.subscribe(`${id}`, async (msg) => {
+          if (Buffer(msg.data).toString().length) {
+            //* We are storing stringified JSON in message
+            const message = JSON.parse(Buffer(msg.data).toString());
+            //* Change message from state
+            await ipfs.pubsub.subscribe(`${id}-${message.id}`, echo);
+            setChannels(await ipfs.pubsub.ls());
+          }
+        });
         setChannels(await ipfs.pubsub.ls());
       }
     })();
@@ -138,10 +149,16 @@ function App() {
     event.preventDefault();
 
     //* Publich message to channel
+
     await ipfs.pubsub.publish(
       "example_topic",
       //* As I sad - stringified JSON
-      JSON.stringify({ username, value, color, channel })
+      JSON.stringify({
+        username,
+        value,
+        color,
+        channel,
+      })
     );
   };
 
@@ -180,6 +197,7 @@ function App() {
                 <div key={key}>
                   <Peer
                     peer={peer}
+                    id={id}
                     self={username}
                     ipfs={ipfs}
                     color={color}
