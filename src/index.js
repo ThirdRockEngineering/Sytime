@@ -3,10 +3,12 @@ import ReactDOM from "react-dom";
 import "./public/CSS/index.css";
 import App from "./app/App";
 import reportWebVitals from "./testing_reporting/reportWebVitals";
+import DIDCheck from './DIDCheck'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    < DIDCheck />
   </React.StrictMode>,
   document.getElementById("root")
 );

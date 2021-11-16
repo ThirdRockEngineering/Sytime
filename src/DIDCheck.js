@@ -27,7 +27,7 @@ const DIDCheck = () => {
   async function readProfile() {
     const [address] = await connect()
     const ceramic = new CeramicClient(endpoint)
-    const idx = new IDX({ ceramic }) //check docs for IDX config update
+    const idx = new IDX({ ceramic })
 
     try {
       const data = await idx.get(
@@ -69,6 +69,12 @@ const DIDCheck = () => {
     })
     console.log('profile updated!')
   }
+
+  useEffect( ()=> {
+    (async ()=>{
+      await readProfile()
+    })()
+  }, [])
 
 
   return (
