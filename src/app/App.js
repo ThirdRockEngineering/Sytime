@@ -1,5 +1,8 @@
 import img from "../public/image.png";
 import "../public/CSS/App.css";
+import Peer from "./User/Peer";
+import Channel from "./Chat/Channel";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 //* node and _web3 is promises now, because we can't
 //* await them in different file :(
@@ -9,6 +12,9 @@ import _web3 from "../decent_network/getWeb3";
 import React, { useEffect, useState } from "react";
 
 function App() {
+  //^ Promise Tracker Attempt
+
+  const { promiseInProgress } = usePromiseTracker(node);
   //* Current message that displays in textarea
   const [value, setValue] = useState("Hello World!");
 
@@ -19,7 +25,12 @@ function App() {
   const [message, setMessage] = useState({});
 
   //* ipfs node
-  const [ipfs, setIpfs] = useState(null);
+  const [ipfs, setIpfs] = useState(
+    null
+    // (() => {
+    //   (async () => await node)();
+    // })()
+  );
 
   //* connection to wallet via web3
   const [web3, setWeb3] = useState(null);
@@ -29,7 +40,8 @@ function App() {
   //* List of connected peers
   const [peers, setPeers] = useState([]);
   const [id, setId] = useState("");
-
+  const [channel, setChannel] = useState("example_topic");
+  const [channels, setChannels] = useState([]);
   //* Ethereum wallet
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
@@ -39,6 +51,25 @@ function App() {
   const [color, setColor] = useState(
     Math.floor(Math.random() * 16777215).toString(16)
   );
+
+  function echo(msg) {
+    const d = new Date();
+    let time = d.getTime();
+
+    //* This is the way that we can read message from ipfs
+    if (Buffer(msg.data).toString().length) {
+      //* We are storing stringified JSON in message
+      const message = JSON.parse(Buffer(msg.data).toString());
+      //* Change message from state
+      setMessage({
+        username: message.username,
+        message: message.value,
+        color: message.color,
+        channel: message.channel,
+        time,
+      });
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -50,40 +81,36 @@ function App() {
       setId((await _ipfs.id()).id);
 
       //* callback that calls every time a message thrown in chat
-      async function echo(msg) {
-        const d = new Date();
-        let time = d.getTime();
-
-        //* This is the way that we can read message from ipfs
-        if (Buffer(msg.data).toString().length) {
-          //* We are storing stringified JSON in message
-          const message = JSON.parse(Buffer(msg.data).toString());
-          //* Change message from state
-          setMessage({
-            username: message.username,
-            message: message.value,
-            color: message.color,
-            time,
-          });
-        }
-
-        //* I know - it's bad sync all peers every time message is thrown
-        //* It's just for now
-        setPeers([...peers, (await _ipfs.pubsub.peers("example_topic"))[0]]);
-        //* It will not display you on your end (idk why)
-      }
 
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
+      setChannels(await _ipfs.pubsub.ls());
     })();
   }, []);
-
+  useEffect(() => {
+    (async () => {
+      if (ipfs && id.length) {
+        await ipfs.pubsub.subscribe(`${id}`, async (msg) => {
+          if (Buffer(msg.data).toString().length) {
+            //* We are storing stringified JSON in message
+            const message = JSON.parse(Buffer(msg.data).toString());
+            //* Change message from state
+            await ipfs.pubsub.subscribe(`${id}-${message.id}`, echo);
+            setChannels(await ipfs.pubsub.ls());
+          }
+        });
+        setChannels(await ipfs.pubsub.ls());
+      }
+    })();
+  }, [ipfs, id]);
   //* Setting up Ethereum wallet
   useEffect(() => {
     (async () => {
       if (web3) {
-        setAccount((await web3.eth.getAccounts())[0]);
-        setUsername((await web3.eth.getAccounts())[0]);
+        const acc = (await web3.eth.getAccounts())[0];
+        setAccount(acc);
+        // console.log((await web3.eth.getAccounts())[0].slice(0, 3));
+        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
       }
     })();
   }, [web3]);
@@ -97,9 +124,15 @@ function App() {
           {
             message: message.message,
             username: message.username,
+            channel: message.channel,
             color: message.color,
           },
         ]);
+        //* I know - it's bad sync all peers every time message is thrown
+        //* It's just for now
+
+        //* It will not display you on your end (idk why)
+        setPeers(await ipfs.pubsub.peers("example_topic"));
       }
     })();
   }, [message]);
@@ -116,14 +149,19 @@ function App() {
     event.preventDefault();
 
     //* Publich message to channel
+
     await ipfs.pubsub.publish(
       "example_topic",
       //* As I sad - stringified JSON
-      JSON.stringify({ username, value, color })
+      JSON.stringify({
+        username,
+        value,
+        color,
+        channel,
+      })
     );
   };
 
-  console.log(peers);
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -137,16 +175,18 @@ function App() {
         <div>
           <h3>Messages</h3>
           <ul>
-            {messages.map((message, key) => {
-              return (
-                <div key={key}>
-                  <span style={{ color: `#${message.color}` }}>
-                    {message.username}
-                  </span>
-                  : {message.message}
-                </div>
-              );
-            })}
+            {messages
+              .filter((message) => message.channel === channel)
+              .map((message, key) => {
+                return (
+                  <div key={key}>
+                    <span style={{ color: `#${message.color}` }}>
+                      {message.username}
+                    </span>
+                    : {message.message}
+                  </div>
+                );
+              })}
           </ul>
         </div>
         <div>
@@ -155,7 +195,34 @@ function App() {
             {peers.map((peer, key) => {
               return (
                 <div key={key}>
-                  <p style={{ fontSize: "15px" }}>{peer}</p>
+                  <Peer
+                    peer={peer}
+                    id={id}
+                    self={username}
+                    ipfs={ipfs}
+                    color={color}
+                    channel={channel}
+                    echo={echo}
+                    setChannels={setChannels}
+                  />
+                </div>
+              );
+            })}
+          </ul>
+        </div>
+        <div>
+          <h3>Channels</h3>
+          <ul>
+            {channels.map((_channel, key) => {
+              return (
+                <div key={key}>
+                  <Channel
+                    channel={_channel}
+                    currentChannel={channel}
+                    self={id}
+                    ipfs={ipfs}
+                    setChannel={setChannel}
+                  />
                 </div>
               );
             })}
