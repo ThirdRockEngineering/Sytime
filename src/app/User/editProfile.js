@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { updateProfile } from '../../ceramicProfile/profile'
 
-const EditProfile = () => {
+const EditProfile = (props) => {
 
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState(''); //link for now
@@ -10,6 +10,7 @@ const EditProfile = () => {
   async function pushUpdate () {
     const data = {name, avatar, description}
     await updateProfile(data)
+    await props.readProfile()
   }
 
   return (

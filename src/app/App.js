@@ -184,7 +184,7 @@ function App(props) {
       ) : (<>
       <p> No Account connected</p>
       </>)}
-        <EditProfile />
+        <EditProfile readProfile={props.readProfile} />
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>

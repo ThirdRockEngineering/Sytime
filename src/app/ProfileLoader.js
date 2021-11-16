@@ -10,18 +10,28 @@ function ProfileLoader () {
 
   useEffect(() => {
     (async () => {
-      const address = await connect()
+      // const address = await connect()
+      // if ( address ){
+      //   const data = await fetchProfile(address)
+      //   setProfile(data)
+      //   setHaveAccount(true)
+      // }
+      await readProfile()
+    })();
+  }, []);
+  console.log('profile loader', profile)
+
+  async function readProfile(){
+    const address = await connect()
       if ( address ){
         const data = await fetchProfile(address)
         setProfile(data)
         setHaveAccount(true)
       }
-    })();
-  }, []);
-  console.log('profile loader', profile)
+  }
 
   return (
-    <App profile={profile} haveAccount={haveAccount}/>
+    <App profile={profile} haveAccount={haveAccount} readProfile={readProfile}/>
   )
 }
 
