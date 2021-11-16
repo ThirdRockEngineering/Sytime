@@ -9,11 +9,11 @@ async function fetchProfile(address){
   const idx = new IDX({ ceramic })
 
   try {
-    const data = await idx.get(
+    return await idx.get(
       'basicProfile',
       `${address}@eip155:1`
     )
-    console.log('DATA LOADED:', data)
+    // console.log('DATA LOADED:', data)
 
   } catch(err) { console.log("Profile Error:", err)}
 }

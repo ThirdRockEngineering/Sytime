@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 import "./public/CSS/index.css";
 import App from "./app/App";
 import reportWebVitals from "./testing_reporting/reportWebVitals";
-import DIDCheck from './DIDCheck'
+import ProfileLoader from './app/ProfileLoader'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
-    {/* < DIDCheck /> */}
+    {/* <App /> */}
+    <ProfileLoader />
   </React.StrictMode>,
   document.getElementById("root")
 );

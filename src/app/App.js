@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 
 import fetchProfile from "../ceramicProfile/fetchProfile";
 
-function App() {
+function App(props) {
   //^ Promise Tracker Attempt
 
   const { promiseInProgress } = usePromiseTracker(node);
@@ -48,6 +48,9 @@ function App() {
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
+
+  //BasicProfile
+  const [profile, setProfile] = useState(props.profile)
 
   //* Color of your username that displays in chat
   const [color, setColor] = useState(
@@ -111,11 +114,6 @@ function App() {
       if (web3) {
         const acc = (await web3.eth.getAccounts())[0];
         setAccount(acc);
-
-        //Ceramic account load
-        console.log("this is acc", acc)
-        fetchProfile(acc)
-
         // console.log((await web3.eth.getAccounts())[0].slice(0, 3));
         setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
       }
@@ -168,7 +166,7 @@ function App() {
       })
     );
   };
-
+  console.log(props)
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -177,6 +175,8 @@ function App() {
       </p>
       <p>Your wallet: {account}</p>
       <p>Your peer id: {id}</p>
+      <p>Your Profile: {props.profile.name}</p>
+      <p>Your avatar: <img alt="avatar" src={props.profile.avatar} /></p>
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
