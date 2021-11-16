@@ -1,29 +1,27 @@
-import fetchProfile from '../ceramicProfile/fetchProfile'
 import App from './App'
 import { useEffect, useState } from 'react'
+import { connect, fetchProfile } from '../ceramicProfile/profile'
 
 
 function ProfileLoader () {
 
   const [profile, setProfile] = useState({})
-  const [name, setName] = useState('')
+  const [haveAccount, setHaveAccount] = useState(false)
 
   useEffect(() => {
     (async () => {
-      const addresses = await window.ethereum.request({
-        method: 'eth_requestAccounts'
-      })
-      const address = addresses[0]
-      const data = await fetchProfile(address)
-      setProfile(data)
+      const address = await connect()
+      if ( address ){
+        const data = await fetchProfile(address)
+        setProfile(data)
+        setHaveAccount(true)
+      }
     })();
   }, []);
   console.log('profile loader', profile)
 
   return (
-    <>
-    <App profile ={profile} />
-    </>
+    <App profile={profile} haveAccount={haveAccount}/>
   )
 }
 

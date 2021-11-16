@@ -11,7 +11,7 @@ import node from "../decent_network/ipfs";
 import _web3 from "../decent_network/getWeb3";
 import React, { useEffect, useState } from "react";
 
-import fetchProfile from "../ceramicProfile/fetchProfile";
+import EditProfile from "./User/editProfile";
 
 function App(props) {
   //^ Promise Tracker Attempt
@@ -175,8 +175,16 @@ function App(props) {
       </p>
       <p>Your wallet: {account}</p>
       <p>Your peer id: {id}</p>
-      <p>Your Profile: {props.profile.name}</p>
-      <p>Your avatar: <img alt="avatar" src={props.profile.avatar} /></p>
+      {props.haveAccount ? (
+        <>
+        <p>Your Profile Name: {props.profile.name}</p>
+        <p>Your Profile avatar: <img alt="avatar" src={props.profile.avatar} /></p>
+        <p>Your Profile description: {props.profile.description}</p>
+        </>
+      ) : (<>
+      <p> No Account connected</p>
+      </>)}
+        <EditProfile />
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
