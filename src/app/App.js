@@ -47,6 +47,27 @@ function App() {
     Math.floor(Math.random() * 16777215).toString(16)
   );
 
+  function echo(msg) {
+    console.log(msg);
+    const d = new Date();
+    let time = d.getTime();
+
+    //* This is the way that we can read message from ipfs
+    if (Buffer(msg.data).toString().length) {
+      //* We are storing stringified JSON in message
+      const message = JSON.parse(Buffer(msg.data).toString());
+      //* Change message from state
+      console.log(message.channel);
+      setMessage({
+        username: message.username,
+        message: message.value,
+        color: message.color,
+        channel: message.channel,
+        time,
+      });
+    }
+  }
+
   useEffect(() => {
     (async () => {
       const _ipfs = await node;
@@ -57,28 +78,6 @@ function App() {
       setId((await _ipfs.id()).id);
 
       //* callback that calls every time a message thrown in chat
-      async function echo(msg) {
-        const d = new Date();
-        let time = d.getTime();
-
-        //* This is the way that we can read message from ipfs
-        if (Buffer(msg.data).toString().length) {
-          //* We are storing stringified JSON in message
-          const message = JSON.parse(Buffer(msg.data).toString());
-          //* Change message from state
-          setMessage({
-            username: message.username,
-            message: message.value,
-            color: message.color,
-            time,
-          });
-        }
-
-        //* I know - it's bad sync all peers every time message is thrown
-        //* It's just for now
-        setPeers(await _ipfs.pubsub.peers("example_topic"));
-        //* It will not display you on your end (idk why)
-      }
 
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
@@ -88,23 +87,7 @@ function App() {
   useEffect(() => {
     (async () => {
       if (ipfs && id.length) {
-        await ipfs.pubsub.subscribe(`${id}`, (msg) => {
-          const d = new Date();
-          let time = d.getTime();
-
-          //* This is the way that we can read message from ipfs
-          if (Buffer(msg.data).toString().length) {
-            //* We are storing stringified JSON in message
-            const message = JSON.parse(Buffer(msg.data).toString());
-            //* Change message from state
-            setMessage({
-              username: message.username,
-              message: message.value,
-              color: message.color,
-              time,
-            });
-          }
-        });
+        await ipfs.pubsub.subscribe(`${id}`, echo);
         setChannels(await ipfs.pubsub.ls());
       }
     })();
@@ -130,12 +113,17 @@ function App() {
           {
             message: message.message,
             username: message.username,
+            channel: message.channel,
             color: message.color,
           },
         ]);
+        //* I know - it's bad sync all peers every time message is thrown
+        //* It's just for now
+
+        //* It will not display you on your end (idk why)
+        setPeers(await ipfs.pubsub.peers("example_topic"));
       }
     })();
-    console.log("yeah");
   }, [message]);
 
   const handleChange = (event) => {
@@ -153,7 +141,7 @@ function App() {
     await ipfs.pubsub.publish(
       "example_topic",
       //* As I sad - stringified JSON
-      JSON.stringify({ username, value, color })
+      JSON.stringify({ username, value, color, channel })
     );
   };
 
@@ -170,16 +158,18 @@ function App() {
         <div>
           <h3>Messages</h3>
           <ul>
-            {messages.map((message, key) => {
-              return (
-                <div key={key}>
-                  <span style={{ color: `#${message.color}` }}>
-                    {message.username}
-                  </span>
-                  : {message.message}
-                </div>
-              );
-            })}
+            {messages
+              .filter((message) => message.channel === channel)
+              .map((message, key) => {
+                return (
+                  <div key={key}>
+                    <span style={{ color: `#${message.color}` }}>
+                      {message.username}
+                    </span>
+                    : {message.message}
+                  </div>
+                );
+              })}
           </ul>
         </div>
         <div>
@@ -192,9 +182,9 @@ function App() {
                     peer={peer}
                     self={username}
                     ipfs={ipfs}
-                    setMessage={setMessage}
                     color={color}
-                    username={username}
+                    channel={channel}
+                    echo={echo}
                     setChannels={setChannels}
                   />
                 </div>
@@ -205,10 +195,16 @@ function App() {
         <div>
           <h3>Channels</h3>
           <ul>
-            {channels.map((channel, key) => {
+            {channels.map((_channel, key) => {
               return (
                 <div key={key}>
-                  <Channel channel={channel} self={id} ipfs={ipfs} />
+                  <Channel
+                    channel={_channel}
+                    currentChannel={channel}
+                    self={id}
+                    ipfs={ipfs}
+                    setChannel={setChannel}
+                  />
                 </div>
               );
             })}
