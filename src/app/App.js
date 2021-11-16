@@ -89,10 +89,20 @@ function App() {
     (async () => {
       if (ipfs && id.length) {
         await ipfs.pubsub.subscribe(`${id}`, (msg) => {
+          const d = new Date();
+          let time = d.getTime();
+
+          //* This is the way that we can read message from ipfs
           if (Buffer(msg.data).toString().length) {
             //* We are storing stringified JSON in message
-            const message = Buffer(msg.data).toString();
-            console.log(message);
+            const message = JSON.parse(Buffer(msg.data).toString());
+            //* Change message from state
+            setMessage({
+              username: message.username,
+              message: message.value,
+              color: message.color,
+              time,
+            });
           }
         });
         setChannels(await ipfs.pubsub.ls());
@@ -125,6 +135,7 @@ function App() {
         ]);
       }
     })();
+    console.log("yeah");
   }, [message]);
 
   const handleChange = (event) => {
@@ -177,7 +188,15 @@ function App() {
             {peers.map((peer, key) => {
               return (
                 <div key={key}>
-                  <Peer peer={peer} self={id} ipfs={ipfs} />
+                  <Peer
+                    peer={peer}
+                    self={username}
+                    ipfs={ipfs}
+                    setMessage={setMessage}
+                    color={color}
+                    username={username}
+                    setChannels={setChannels}
+                  />
                 </div>
               );
             })}
