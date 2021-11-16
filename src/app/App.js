@@ -11,6 +11,8 @@ import node from "../decent_network/ipfs";
 import _web3 from "../decent_network/getWeb3";
 import React, { useEffect, useState } from "react";
 
+import fetchProfile from "../ceramicProfile/fetchProfile";
+
 function App() {
   //^ Promise Tracker Attempt
 
@@ -109,6 +111,11 @@ function App() {
       if (web3) {
         const acc = (await web3.eth.getAccounts())[0];
         setAccount(acc);
+
+        //Ceramic account load
+        console.log("this is acc", acc)
+        fetchProfile(acc)
+
         // console.log((await web3.eth.getAccounts())[0].slice(0, 3));
         setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
       }

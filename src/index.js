@@ -7,8 +7,8 @@ import DIDCheck from './DIDCheck'
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    < DIDCheck />
+    <App />
+    {/* < DIDCheck /> */}
   </React.StrictMode>,
   document.getElementById("root")
 );
