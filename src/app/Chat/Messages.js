@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import web3StorageClient, {
   storeWithProgress,
-} from "../decent_network/web3Storage";
+} from "../../decent_network/web3Storage";
 const Messages = ({ channel, ipfs, message, setPeers }) => {
   //* List of all messages
   const [messages, setMessages] = useState([]);

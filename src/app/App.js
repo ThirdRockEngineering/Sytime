@@ -8,9 +8,9 @@ import { makeFileObject } from "./Utils/filemaker";
 
 //* Components
 import EditProfile from "./User/editProfile";
-import Messages from "./Messages";
-import Peers from "./Peers";
-import Channels from "./Channels";
+import Messages from "./Chat/Messages";
+import Peers from "./Chat/Peers";
+import Channels from "./Chat/Channels";
 
 //* Hooks
 import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
