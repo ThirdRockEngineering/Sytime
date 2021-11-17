@@ -260,12 +260,13 @@ function App(props) {
           Name:
           <input type="text" value={username} onChange={handleChangeUsername} />
         </label>
-        <textarea
-          style={{ width: "100%", height: "500px" }}
+        <input
+          style={{ width: "75%" }}
           id="textfield"
           onChange={handleChange}
           value={value}
-        ></textarea>
+          type="text"
+        />
         <button>Send message</button>
       </form>
     </div>
