@@ -16,7 +16,6 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
 
   useEffect(() => {
     (async () => {
-      console.log("changes channel", await fetchHistory());
       setMessages(
         (await fetchHistory()).filter((message) => message.channel === channel)
       );
@@ -25,7 +24,6 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
 
   useEffect(() => {
     (async () => {
-      console.log("changes channel", await fetchHistory());
       setMessages(
         (await fetchHistory()).filter((message) => message.channel === channel)
       );

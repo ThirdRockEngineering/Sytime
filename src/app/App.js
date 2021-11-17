@@ -142,16 +142,21 @@ function App(props) {
       <form onSubmit={handleSubmit}>
         <label>
           Name:
-          <input type="text" value={username} onChange={handleChangeUsername} />
+          <input
+            style={{ height: "30px" }}
+            type="text"
+            value={username}
+            onChange={handleChangeUsername}
+          />
         </label>
         <input
-          style={{ width: "75%" }}
+          style={{ width: "75%", height: "30px" }}
           id="textfield"
           onChange={handleChange}
           value={value}
           type="text"
         />
-        <button>Send message</button>
+        <button style={{ height: "30px" }}>Send message</button>
       </form>
     </div>
   );
