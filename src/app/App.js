@@ -9,35 +9,13 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 //* check getWeb3.js and ipfs.js
 import node from "../decent_network/ipfs";
 import _web3 from "../decent_network/getWeb3";
-import web3StorageClient from "../decent_network/web3Storage";
+import web3StorageClient, {
+  storeWithProgress,
+} from "../decent_network/web3Storage";
 import { makeFileObject } from "./Utils/filemaker";
 import React, { useEffect, useState } from "react";
 
 import EditProfile from "./User/editProfile";
-
-async function storeWithProgress(files) {
-  // show the root cid as soon as it's ready
-  const onRootCidReady = (cid) => {
-    console.log("uploading files with cid:", cid);
-  };
-
-  // when each chunk is stored, update the percentage complete and display
-  const totalSize = files.map((f) => f.size).reduce((a, b) => a + b, 0);
-  let uploaded = 0;
-
-  const onStoredChunk = (size) => {
-    uploaded += size;
-    const pct = totalSize / uploaded;
-    console.log(`Uploading... ${pct.toFixed(2)}% complete`);
-  };
-
-  // makeStorageClient returns an authorized Web3.Storage client instance
-  const client = web3StorageClient;
-
-  // client.put will invoke our callbacks during the upload
-  // and return the root cid when the upload completes
-  return client.put(files, { onRootCidReady, onStoredChunk });
-}
 
 function App(props) {
   //^ Promise Tracker Attempt
@@ -121,6 +99,7 @@ function App(props) {
       setChannels(await _ipfs.pubsub.ls());
     })();
   }, []);
+
   useEffect(() => {
     (async () => {
       if (ipfs && id.length) {
@@ -138,6 +117,7 @@ function App(props) {
       }
     })();
   }, [ipfs, id]);
+
   //* Setting up Ethereum wallet
   useEffect(() => {
     (async () => {
