@@ -12,7 +12,9 @@ import _web3 from "../decent_network/getWeb3";
 import web3StorageClient from "../decent_network/web3Storage";
 import React, { useEffect, useState } from "react";
 
-function App() {
+import EditProfile from "./User/editProfile";
+
+function App(props) {
   //^ Promise Tracker Attempt
 
   const { promiseInProgress } = usePromiseTracker(node);
@@ -37,11 +39,12 @@ function App() {
 
   //* connection to wallet via web3
   const [web3, setWeb3] = useState(null);
-
   const [username, setUsername] = useState("");
 
   //* List of connected peers
   const [peers, setPeers] = useState([]);
+
+  //* Your id
   const [id, setId] = useState("");
   const [channel, setChannel] = useState("example_topic");
   const [channels, setChannels] = useState([]);
@@ -50,12 +53,17 @@ function App() {
     "You are not connected to your ethereum wallet"
   );
 
+  //BasicProfile
+  const [profile, setProfile] = useState(props.profile);
+
   //* Color of your username that displays in chat
   const [color, setColor] = useState(
+    //* Your color in channels
     Math.floor(Math.random() * 16777215).toString(16)
   );
 
   function echo(msg) {
+    //* We have date here, but we don't use it now
     const d = new Date();
     let time = d.getTime();
 
@@ -83,8 +91,6 @@ function App() {
       setWeb3(await _web3);
       setId((await _ipfs.id()).id);
 
-      //* callback that calls every time a message thrown in chat
-
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
       setChannels(await _ipfs.pubsub.ls());
@@ -102,6 +108,7 @@ function App() {
             setChannels(await ipfs.pubsub.ls());
           }
         });
+        //* ls method will list all channel you are connected to
         setChannels(await ipfs.pubsub.ls());
       }
     })();
@@ -111,9 +118,11 @@ function App() {
     (async () => {
       if (web3) {
         const acc = (await web3.eth.getAccounts())[0];
-        setAccount(acc);
-        // console.log((await web3.eth.getAccounts())[0].slice(0, 3));
-        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+        if (acc) {
+          setAccount(acc);
+          //* Make it shorter
+          setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+        }
       }
     })();
   }, [web3]);
@@ -164,7 +173,7 @@ function App() {
       })
     );
   };
-
+  console.log(props);
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -173,6 +182,20 @@ function App() {
       </p>
       <p>Your wallet: {account}</p>
       <p>Your peer id: {id}</p>
+      {props.haveAccount ? (
+        <>
+          <p>Your Profile Name: {props.profile.name}</p>
+          <p>
+            Your Profile avatar: <img alt="avatar" src={props.profile.avatar} />
+          </p>
+          <p>Your Profile description: {props.profile.description}</p>
+        </>
+      ) : (
+        <>
+          <p> No Account connected</p>
+        </>
+      )}
+      <EditProfile readProfile={props.readProfile} />
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
@@ -204,7 +227,6 @@ function App() {
                     self={username}
                     ipfs={ipfs}
                     color={color}
-                    channel={channel}
                     echo={echo}
                     setChannels={setChannels}
                   />
