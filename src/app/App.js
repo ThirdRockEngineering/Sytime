@@ -1,48 +1,35 @@
 import img from "../public/image.png";
 import "../public/CSS/App.css";
-import Channel from "./Chat/Channel";
-import { trackPromise, usePromiseTracker } from "react-promise-tracker";
-
-//* node and _web3 is promises now, because we can't
-//* await them in different file :(
-//* check getWeb3.js and ipfs.js
-import node from "../decent_network/ipfs";
-import _web3 from "../decent_network/getWeb3";
-
-import { makeFileObject } from "./Utils/filemaker";
 import React, { useEffect, useState } from "react";
 
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
+
+import { makeFileObject } from "./Utils/filemaker";
+
+//* Components
 import EditProfile from "./User/editProfile";
 import Messages from "./Messages";
 import Peers from "./Peers";
 import Channels from "./Channels";
 
 //* Hooks
-import { useName, useChannels } from "./Hooks/appHooks";
+import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
 
 function App(props) {
-  //^ Promise Tracker Attempt
-
-  const { promiseInProgress } = usePromiseTracker(node);
   //* Current message that displays in textarea
   const [value, setValue] = useState("Hello World!");
 
   //* Your current message that you've just sent
   const [message, setMessage] = useState({});
 
-  //* ipfs node
-  const [ipfs, setIpfs] = useState(null);
-
-  //* connection to wallet via web3
-  const [web3, setWeb3] = useState(null);
-
   //* List of connected peers
   const [peers, setPeers] = useState([]);
-
-  //* Your id
-  const [id, setId] = useState("");
   const [channel, setChannel] = useState("example_topic");
-  const [channels, setChannels] = useChannels(ipfs, id, echo);
+  const [channels, setChannels] = useChannels(echo);
+
+  //* Web3 stuff
+  const [ipfs, web3, id] = useWeb3(setChannels, echo);
+
   //* Ethereum wallet
   const [account, username, setUsername] = useName(web3);
 
@@ -51,10 +38,10 @@ function App(props) {
 
   //* Color of your username that displays in chat
   const [color, setColor] = useState(
-    //* Your color in channels
     Math.floor(Math.random() * 16777215).toString(16)
   );
 
+  //* callback when someone publishi in channel
   function echo(msg) {
     //* We have date here, but we don't use it now
     const d = new Date();
@@ -74,22 +61,6 @@ function App(props) {
       });
     }
   }
-
-  //* Await all promises
-  useEffect(() => {
-    (async () => {
-      const _ipfs = await node;
-
-      //* setting global state
-      setIpfs(await _ipfs);
-      setWeb3(await _web3);
-      setId((await _ipfs.id()).id);
-
-      //* Subscribe your browser to topic
-      await _ipfs.pubsub.subscribe("example_topic", echo);
-      setChannels(await _ipfs.pubsub.ls());
-    })();
-  }, []);
 
   const handleChange = (event) => {
     setValue(event.target.value);
