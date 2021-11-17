@@ -51,7 +51,7 @@ function App(props) {
   );
 
   //BasicProfile
-  const [profile, setProfile] = useState(props.profile)
+  const [profile, setProfile] = useState(props.profile);
 
   //* Color of your username that displays in chat
   const [color, setColor] = useState(
@@ -115,9 +115,11 @@ function App(props) {
     (async () => {
       if (web3) {
         const acc = (await web3.eth.getAccounts())[0];
-        setAccount(acc);
-        //* Make it shorter
-        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+        if (acc) {
+          setAccount(acc);
+          //* Make it shorter
+          setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+        }
       }
     })();
   }, [web3]);
@@ -168,7 +170,7 @@ function App(props) {
       })
     );
   };
-  console.log(props)
+  console.log(props);
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -179,14 +181,18 @@ function App(props) {
       <p>Your peer id: {id}</p>
       {props.haveAccount ? (
         <>
-        <p>Your Profile Name: {props.profile.name}</p>
-        <p>Your Profile avatar: <img alt="avatar" src={props.profile.avatar} /></p>
-        <p>Your Profile description: {props.profile.description}</p>
+          <p>Your Profile Name: {props.profile.name}</p>
+          <p>
+            Your Profile avatar: <img alt="avatar" src={props.profile.avatar} />
+          </p>
+          <p>Your Profile description: {props.profile.description}</p>
         </>
-      ) : (<>
-      <p> No Account connected</p>
-      </>)}
-        <EditProfile readProfile={props.readProfile} />
+      ) : (
+        <>
+          <p> No Account connected</p>
+        </>
+      )}
+      <EditProfile readProfile={props.readProfile} />
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
