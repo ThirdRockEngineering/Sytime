@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Peer from "./User/Peer";
+import Peer from "../User/Peer";
 
 const Peers = ({ peers, id, username, ipfs, color, echo, setChannels }) => {
   return (

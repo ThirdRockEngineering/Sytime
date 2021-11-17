@@ -1,63 +1,47 @@
 import img from "../public/image.png";
 import "../public/CSS/App.css";
-import Channel from "./Chat/Channel";
-import { trackPromise, usePromiseTracker } from "react-promise-tracker";
-
-//* node and _web3 is promises now, because we can't
-//* await them in different file :(
-//* check getWeb3.js and ipfs.js
-import node from "../decent_network/ipfs";
-import _web3 from "../decent_network/getWeb3";
-
-import { makeFileObject } from "./Utils/filemaker";
 import React, { useEffect, useState } from "react";
 
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
+
+import { makeFileObject } from "./Utils/filemaker";
+
+//* Components
 import EditProfile from "./User/editProfile";
-import Messages from "./Messages";
-import Peers from "./Peers";
-import Channels from "./Channels";
+import Messages from "./Chat/Messages";
+import Peers from "./Chat/Peers";
+import Channels from "./Chat/Channels";
+
+//* Hooks
+import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
 
 function App(props) {
-  //^ Promise Tracker Attempt
-
-  const { promiseInProgress } = usePromiseTracker(node);
   //* Current message that displays in textarea
   const [value, setValue] = useState("Hello World!");
-
-  //* List of all messages
-  // const [messages, setMessages] = useState([]);
 
   //* Your current message that you've just sent
   const [message, setMessage] = useState({});
 
-  //* ipfs node
-  const [ipfs, setIpfs] = useState(null);
-
-  //* connection to wallet via web3
-  const [web3, setWeb3] = useState(null);
-  const [username, setUsername] = useState("");
-
   //* List of connected peers
   const [peers, setPeers] = useState([]);
-
-  //* Your id
-  const [id, setId] = useState("");
   const [channel, setChannel] = useState("example_topic");
-  const [channels, setChannels] = useState([]);
-  //* Ethereum wallet
-  const [account, setAccount] = useState(
-    "You are not connected to your ethereum wallet"
+  const [channels, setChannels] = useChannels(echo);
+
+  //* Web3 stuff
+  const [ipfs, web3, id, username, setUsername, color] = useWeb3(
+    setChannels,
+    echo
   );
+
+  //* Ethereum wallet
+  const [account] = useName(web3);
 
   //BasicProfile
   const [profile, setProfile] = useState(props.profile);
 
   //* Color of your username that displays in chat
-  const [color, setColor] = useState(
-    //* Your color in channels
-    Math.floor(Math.random() * 16777215).toString(16)
-  );
 
+  //* callback when someone publishi in channel
   function echo(msg) {
     //* We have date here, but we don't use it now
     const d = new Date();
@@ -78,55 +62,6 @@ function App(props) {
     }
   }
 
-  //* Await all promises
-  useEffect(() => {
-    (async () => {
-      const _ipfs = await node;
-
-      //* setting global state
-      setIpfs(await _ipfs);
-      setWeb3(await _web3);
-      setId((await _ipfs.id()).id);
-
-      //* Subscribe your browser to topic
-      await _ipfs.pubsub.subscribe("example_topic", echo);
-      setChannels(await _ipfs.pubsub.ls());
-    })();
-  }, []);
-
-  //* Subscribe to yourself
-  useEffect(() => {
-    (async () => {
-      if (ipfs && id.length) {
-        await ipfs.pubsub.subscribe(`${id}`, async (msg) => {
-          if (Buffer(msg.data).toString().length) {
-            //* We are storing stringified JSON in message
-            const message = JSON.parse(Buffer(msg.data).toString());
-            //* Change message from state
-            await ipfs.pubsub.subscribe(`${id}-${message.id}`, echo);
-            setChannels(await ipfs.pubsub.ls());
-          }
-        });
-        //* ls method will list all channel you are connected to
-        setChannels(await ipfs.pubsub.ls());
-      }
-    })();
-  }, [ipfs, id]);
-
-  //* Setting up Ethereum wallet
-  useEffect(() => {
-    (async () => {
-      if (web3) {
-        const acc = (await web3.eth.getAccounts())[0];
-        if (acc) {
-          setAccount(acc);
-          //* Make it shorter
-          setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
-        }
-      }
-    })();
-  }, [web3]);
-
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -139,7 +74,6 @@ function App(props) {
     event.preventDefault();
 
     //* Publich message to channel
-
     await ipfs.pubsub.publish(
       "example_topic",
       //* As I sad - stringified JSON
@@ -151,7 +85,9 @@ function App(props) {
       })
     );
   };
+
   console.log(props);
+
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -206,16 +142,21 @@ function App(props) {
       <form onSubmit={handleSubmit}>
         <label>
           Name:
-          <input type="text" value={username} onChange={handleChangeUsername} />
+          <input
+            style={{ height: "30px" }}
+            type="text"
+            value={username}
+            onChange={handleChangeUsername}
+          />
         </label>
         <input
-          style={{ width: "75%" }}
+          style={{ width: "75%", height: "30px" }}
           id="textfield"
           onChange={handleChange}
           value={value}
           type="text"
         />
-        <button>Send message</button>
+        <button style={{ height: "30px" }}>Send message</button>
       </form>
     </div>
   );

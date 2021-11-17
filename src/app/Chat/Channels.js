@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Channel from "./Chat/Channel";
+import Channel from "./Channel";
 
 const Channels = ({ channels, currentChannel, ipfs, id, setChannel }) => {
   return (
