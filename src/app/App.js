@@ -11,7 +11,9 @@ import node from "../decent_network/ipfs";
 import _web3 from "../decent_network/getWeb3";
 import React, { useEffect, useState } from "react";
 
-function App() {
+import EditProfile from "./User/editProfile";
+
+function App(props) {
   //^ Promise Tracker Attempt
 
   const { promiseInProgress } = usePromiseTracker(node);
@@ -47,6 +49,9 @@ function App() {
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
+
+  //BasicProfile
+  const [profile, setProfile] = useState(props.profile);
 
   //* Color of your username that displays in chat
   const [color, setColor] = useState(
@@ -110,9 +115,11 @@ function App() {
     (async () => {
       if (web3) {
         const acc = (await web3.eth.getAccounts())[0];
-        setAccount(acc);
-        //* Make it shorter
-        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+        if (acc) {
+          setAccount(acc);
+          //* Make it shorter
+          setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+        }
       }
     })();
   }, [web3]);
@@ -163,7 +170,7 @@ function App() {
       })
     );
   };
-
+  console.log(props);
   return (
     <div className="App">
       <img src={img} className="App-logo" alt="logo" />
@@ -172,6 +179,20 @@ function App() {
       </p>
       <p>Your wallet: {account}</p>
       <p>Your peer id: {id}</p>
+      {props.haveAccount ? (
+        <>
+          <p>Your Profile Name: {props.profile.name}</p>
+          <p>
+            Your Profile avatar: <img alt="avatar" src={props.profile.avatar} />
+          </p>
+          <p>Your Profile description: {props.profile.description}</p>
+        </>
+      ) : (
+        <>
+          <p> No Account connected</p>
+        </>
+      )}
+      <EditProfile readProfile={props.readProfile} />
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
