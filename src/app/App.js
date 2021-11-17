@@ -192,7 +192,7 @@ function App(props) {
           <p> No Account connected</p>
         </>
       )}
-      <EditProfile readProfile={props.readProfile} />
+      <EditProfile readProfile={props.readProfile} haveAccount={props.haveAccount} profile={props.profile} />
       {/* <h1>{me}</h1> */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
