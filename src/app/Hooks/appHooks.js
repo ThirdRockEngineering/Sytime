@@ -10,7 +10,7 @@ export const useName = (web3) => {
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
-  const [username, setUsername] = useState("");
+
   //* Setting up Ethereum wallet
   useEffect(() => {
     (async () => {
@@ -19,13 +19,12 @@ export const useName = (web3) => {
         if (acc) {
           setAccount(acc);
           //* Make it shorter
-          setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
         }
       }
     })();
   }, [web3]);
 
-  return [account, username, setUsername];
+  return [account];
 };
 
 export const useChannels = (echo) => {
@@ -59,28 +58,49 @@ export const useWeb3 = (setChannels, echo) => {
   const [ipfs, setIpfs] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
+  const [color, setColor] = useState(
+    Math.floor(Math.random() * 16777215).toString(16)
+  );
 
   //* Await all promises
   useEffect(() => {
     (async () => {
       const _ipfs = await node;
-
-      //* setting global state
-
+      const web3 = await _web3;
+      const acc = (await web3.eth.getAccounts())[0];
+      let newPeer = "new peer";
       //* ipfs node
-      setIpfs(await _ipfs);
-
+      setIpfs(_ipfs);
+      if (acc) {
+        newPeer = acc.slice(0, 4) + "..." + acc.slice(-4);
+        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
+      }
       //* connection to wallet via web3
-      setWeb3(await _web3);
+      setWeb3(web3);
 
       //* Your id
-      setId((await _ipfs.id()).id);
 
+      const _id = (await _ipfs.id()).id;
+      setId(_id);
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
+
+      setTimeout(async () => {
+        await _ipfs.pubsub.publish(
+          "example_topic",
+          JSON.stringify({
+            username: newPeer,
+            value: "is joined",
+            color,
+            id: _id,
+            channel: "example_topic",
+          })
+        );
+      }, 3000);
       setChannels(await _ipfs.pubsub.ls());
     })();
   }, []);
 
-  return [ipfs, web3, id];
+  return [ipfs, web3, id, username, setUsername, color];
 };

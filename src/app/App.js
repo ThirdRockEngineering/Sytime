@@ -28,18 +28,18 @@ function App(props) {
   const [channels, setChannels] = useChannels(echo);
 
   //* Web3 stuff
-  const [ipfs, web3, id] = useWeb3(setChannels, echo);
+  const [ipfs, web3, id, username, setUsername, color] = useWeb3(
+    setChannels,
+    echo
+  );
 
   //* Ethereum wallet
-  const [account, username, setUsername] = useName(web3);
+  const [account] = useName(web3);
 
   //BasicProfile
   const [profile, setProfile] = useState(props.profile);
 
   //* Color of your username that displays in chat
-  const [color, setColor] = useState(
-    Math.floor(Math.random() * 16777215).toString(16)
-  );
 
   //* callback when someone publishi in channel
   function echo(msg) {

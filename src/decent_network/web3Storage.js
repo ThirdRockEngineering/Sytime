@@ -1,8 +1,10 @@
 //* I had an issue w webpack here :)
 //* https://github.com/web3-storage/web3.storage/issues/312
 import { Web3Storage } from "web3.storage/dist/bundle.esm.min.js";
+import axios from "axios";
 
 function getAccessToken() {
+  //* I know it's bad. It's for development
   return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDYxMDhFNGQwMkRBNTk3NzQ0RUM4M0JiMUY2NDIyODA3NEE1MjJmNEUiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2MzcwOTM4OTk2NjYsIm5hbWUiOiJTeXRpbWUifQ.YCCi50dr2kv26AK4ZNo52eHDFTPaXSd6u9Q9r1rRT0k";
 }
 
@@ -32,7 +34,24 @@ export async function storeWithProgress(files) {
 
   // client.put will invoke our callbacks during the upload
   // and return the root cid when the upload completes
-  return client.put(files, { onRootCidReady, onStoredChunk });
+  try {
+    return client.put(files, { onRootCidReady, onStoredChunk });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function fetchHistory() {
+  const res = await client.list().next();
+  try {
+    const cid = res.value.cid;
+    const { data } = await axios.get(
+      `https://${cid}.ipfs.dweb.link/history-snapshot.json`
+    );
+    return data;
+  } catch (error) {
+    return [];
+  }
 }
 
 export default client;
