@@ -31,7 +31,7 @@ export async function fetchProfile(address) {
   }
 }
 
-export async function updateProfile(data){
+export async function setProfile(data, account){
   const address = await connect()
 
   const ceramic = new CeramicClient(endpoint)
@@ -52,7 +52,13 @@ export async function updateProfile(data){
 
   const idx = new IDX({ceramic})
 
-  try {
-    await idx.set('basicProfile', data)
-  } catch(err) { console.log('update failed', err)}
+  if(!account){
+    try {
+      await idx.set('basicProfile', data)
+    } catch(err) { console.log('creation failed', err)}
+  } else {
+    try {
+      await idx.merge('basicProfile', data)
+    } catch(err) { console.log('update failed', err)}
+  }
 }
