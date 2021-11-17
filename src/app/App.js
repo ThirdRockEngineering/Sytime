@@ -10,9 +10,34 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import node from "../decent_network/ipfs";
 import _web3 from "../decent_network/getWeb3";
 import web3StorageClient from "../decent_network/web3Storage";
+import { makeFileObject } from "./Utils/filemaker";
 import React, { useEffect, useState } from "react";
 
 import EditProfile from "./User/editProfile";
+
+async function storeWithProgress(files) {
+  // show the root cid as soon as it's ready
+  const onRootCidReady = (cid) => {
+    console.log("uploading files with cid:", cid);
+  };
+
+  // when each chunk is stored, update the percentage complete and display
+  const totalSize = files.map((f) => f.size).reduce((a, b) => a + b, 0);
+  let uploaded = 0;
+
+  const onStoredChunk = (size) => {
+    uploaded += size;
+    const pct = totalSize / uploaded;
+    console.log(`Uploading... ${pct.toFixed(2)}% complete`);
+  };
+
+  // makeStorageClient returns an authorized Web3.Storage client instance
+  const client = web3StorageClient;
+
+  // client.put will invoke our callbacks during the upload
+  // and return the root cid when the upload completes
+  return client.put(files, { onRootCidReady, onStoredChunk });
+}
 
 function App(props) {
   //^ Promise Tracker Attempt
@@ -148,6 +173,24 @@ function App(props) {
       }
     })();
   }, [message]);
+
+  useEffect(() => {
+    (async () => {
+      if (messages.length) {
+        // const fr = new FileReader();
+        const files = makeFileObject(messages);
+        const cid = await storeWithProgress([files]);
+        const res = await web3StorageClient.get(cid);
+        console.log(res);
+        // const _files = await res.files();
+        // for (const file of _files) {
+        //   console.log(`${file.cid} -- ${file.path} -- ${file.size}`);
+        // }
+        // console.log(history);
+        // console.log(fr.readAsText(history));
+      }
+    })();
+  }, [messages]);
 
   const handleChange = (event) => {
     setValue(event.target.value);
