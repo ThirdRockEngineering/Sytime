@@ -9,6 +9,7 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 //* check getWeb3.js and ipfs.js
 import node from "../decent_network/ipfs";
 import _web3 from "../decent_network/getWeb3";
+import web3StorageClient from "../decent_network/web3Storage";
 import React, { useEffect, useState } from "react";
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
     //   (async () => await node)();
     // })()
   );
+
+  const [storageClient, setStorageClient] = useState(web3StorageClient);
 
   //* connection to wallet via web3
   const [web3, setWeb3] = useState(null);
