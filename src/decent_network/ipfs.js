@@ -1,6 +1,8 @@
 import * as IPFS from "ipfs-core";
+import web3 from "./getWeb3";
 
 const main = async () => {
+  //(await (await web3).eth.getAccounts())[0];
   const ipfs = await IPFS.create({
     repo: repo(), // random so we get a new peerid every time, useful for testing
     //* Here we establishing connection to Discordians node
