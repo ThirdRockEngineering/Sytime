@@ -6,6 +6,8 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { makeFileObject } from "./Utils/filemaker";
 
+import { Box, Typography } from "@mui/material"
+
 //* Components
 import EditProfile from "./User/editProfile";
 import Messages from "./Chat/Messages";
@@ -14,6 +16,7 @@ import Channels from "./Chat/Channels";
 
 //* Hooks
 import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
+import { textAlign } from "@mui/system";
 
 function App(props) {
   //* Current message that displays in textarea
@@ -89,76 +92,132 @@ function App(props) {
   console.log(props);
 
   return (
-    <div className="App">
-      <img src={img} className="App-logo" alt="logo" />
-      <p>
-        Simple test <code>ipfs-pubsub</code> with changing doc.
-      </p>
-      <p>Your wallet: {account}</p>
-      <p>Your peer id: {id}</p>
-      {props.haveAccount ? (
-        <>
-          <p>Your Profile Name: {props.profile.name}</p>
-          <p>
-            Your Profile avatar: <img alt="avatar" src={props.profile.avatar} />
-          </p>
-          <p>Your Profile description: {props.profile.description}</p>
-        </>
-      ) : (
-        <>
-          <p> No Account connected</p>
-        </>
-      )}
-      <EditProfile
-        readProfile={props.readProfile}
-        haveAccount={props.haveAccount}
-        profile={props.profile}
-      />
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
-        <Messages
-          channel={channel}
-          message={message}
-          ipfs={ipfs}
-          setPeers={setPeers}
-        />
-        <Peers
-          peers={peers}
-          id={id}
-          self={username}
-          ipfs={ipfs}
-          color={color}
-          echo={echo}
-          setChannels={setChannels}
-        />
-        <Channels
-          channels={channels}
-          currentChannel={channel}
-          self={id}
-          ipfs={ipfs}
-          setChannel={setChannel}
-        />
-      </div>
+    <>
+      <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)" >
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            style={{ height: "30px" }}
-            type="text"
-            value={username}
-            onChange={handleChangeUsername}
+        <Box className="NavBar" gridColumn="span 12" p={3} sx={{
+          border: "1px solid black"
+        }}>
+          <Typography variant="h4">
+            Sytime
+          </Typography>
+
+        </Box>
+
+        <Box className="LeftSide" gridColumn="span 3" sx={{
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Box className="logo">
+            <img src={img} className="App-logo" alt="logo" />
+          </Box>
+
+          <Box className="Channels" sx={{
+            maxHeight:"10vw",
+            overflow:"auto"
+          }}>
+          <Channels
+            channels={channels}
+            currentChannel={channel}
+            self={id}
+            ipfs={ipfs}
+            setChannel={setChannel}
           />
-        </label>
-        <input
-          style={{ width: "75%", height: "30px" }}
-          id="textfield"
-          onChange={handleChange}
-          value={value}
-          type="text"
-        />
-        <button style={{ height: "30px" }}>Send message</button>
-      </form>
-    </div>
+          </Box>
+          <Box className="Peers" sx={{
+            overflow:"auto"
+          }}>
+            <Peers
+            peers={peers}
+            id={id}
+            self={username}
+            ipfs={ipfs}
+            color={color}
+            echo={echo}
+            setChannels={setChannels}
+            />
+          </Box>
+        </Box>
+
+        <Box className="ChatArea" gridColumn="span 9" sx={{
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
+            <Box className="Chat" gridColumn="span 7" sx={{
+              minHeight: "20vw",
+              maxHeight:"40vw",
+              overflow:"auto",
+              border: "1px solid black",
+              textAlign:"left"
+            }}>
+              <Messages
+                channel={channel}
+                message={message}
+                ipfs={ipfs}
+                setPeers={setPeers}
+              />
+            </Box>
+
+          <Box className="profile" p={2} gridColumn="span 5" sx={{
+            overflow:"auto"
+          }}>
+          <p>
+              Simple test <code>ipfs-pubsub</code> with changing doc.
+            </p>
+            <p>Your wallet: {account}</p>
+            <p>Your peer id: {id}</p>
+            {props.haveAccount ? (
+              <>
+                <p>Your Profile Name: {props.profile.name}</p>
+                <p>
+                  Your Profile avatar: <img alt="avatar" src={props.profile.avatar} />
+                </p>
+                <p>Your Profile description: {props.profile.description}</p>
+              </>
+            ) : (
+              <>
+                <p> No Account connected</p>
+              </>
+            )}
+            <EditProfile
+              readProfile={props.readProfile}
+              haveAccount={props.haveAccount}
+              profile={props.profile}
+            />
+          </Box>
+
+          </Box>
+          <Box className="input" p={3} sx={{
+            minHeight: "10vw",
+            border: "1px solid black",
+            textAlign:"left"
+          }}>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Name:
+                <input
+                  style={{ height: "20px" }}
+                  type="text"
+                  value={username}
+                  onChange={handleChangeUsername}
+                />
+              </label>
+              <br></br>
+              Message:
+              <input
+                style={{ width: "75%", height: "30px" }}
+                id="textfield"
+                onChange={handleChange}
+                value={value}
+                type="text"
+              />
+              <button style={{ height: "30px" }}>Send message</button>
+            </form>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 }
 
