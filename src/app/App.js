@@ -55,7 +55,7 @@ function App(props) {
     if (Buffer(msg.data).toString().length) {
       //* We are storing stringified JSON in message
       const message = JSON.parse(Buffer(msg.data).toString());
-      if (message.type !== "file") {
+      if (message.type === "text") {
         //* Change message from state
         setMessage({
           username: message.username,
@@ -67,7 +67,6 @@ function App(props) {
         });
       } else {
         //   //* Also strang
-        console.log(message.type, message.hash);
         setMessage({
           username: message.username,
           message: message.value,
@@ -99,7 +98,7 @@ function App(props) {
       let hash;
       reader.onloadend = async () => {
         hash = await ipfs.add(Buffer(reader.result));
-        console.log("converted");
+        console.log("converted", hash.path);
         await ipfs.pubsub.publish(
           "example_topic",
           //* As I sad - stringified JSON
@@ -109,9 +108,10 @@ function App(props) {
             color,
             channel,
             type,
-            hash,
+            hash: hash.path,
           })
         );
+        setFile(null);
       };
     } else {
       await ipfs.pubsub.publish(

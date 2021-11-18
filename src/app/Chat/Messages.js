@@ -33,6 +33,7 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
   useEffect(() => {
     (async () => {
       if (message.message && message.channel === channel) {
+        console.log(message);
         setMessages([
           ...messages,
           {
@@ -40,6 +41,8 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
             username: message.username,
             channel: message.channel,
             color: message.color,
+            type: message.type === "file" ? "file" : "text",
+            hash: message.hash ? message.hash : undefined,
           },
         ]);
         //* I know - it's bad sync all peers every time message is thrown
@@ -49,6 +52,7 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
 
         //* Upload history to web3.storage
         const _messages = await fetchHistory();
+        console.log("YES HERE", message);
         _messages.push(message);
         const file = makeFileObject(_messages);
         await storeWithProgress([file]);
@@ -73,10 +77,11 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
               <span style={{ color: `#${message.color}` }}>
                 {message.username}
               </span>
-              :{" "}
+              : {message.message}
               <img
                 src={`https://ipfs.io/ipfs/${message.hash}`}
                 alt="sending pic"
+                style={{ maxHeight: "50px", maxWeight: "50px" }}
               />
             </div>
           );
