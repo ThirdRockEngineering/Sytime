@@ -20,13 +20,17 @@ function ProfileLoader() {
   console.log("profile loader", profile);
 
   async function readProfile() {
-    const address = await connect();
-    if (address) {
-      const data = await fetchProfile(address);
-      if (data) {
-        setProfile(data);
-        setHaveAccount(true);
+    try{
+      const address = await connect();
+      if (address) {
+        const data = await fetchProfile(address);
+        if (data) {
+          setProfile(data);
+          setHaveAccount(true);
+        }
       }
+    } catch(err) {
+      alert('Ethereum account not connected', err)
     }
   }
 
