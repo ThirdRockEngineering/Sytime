@@ -95,6 +95,7 @@ export const useWeb3 = (setChannels, echo) => {
             color,
             id: _id,
             channel: "example_topic",
+            type: "text",
           })
         );
       }, 3000);
