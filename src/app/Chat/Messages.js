@@ -61,12 +61,23 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
       <h3>Messages</h3>
       <ul>
         {messages.map((message, key) => {
-          return (
+          return message.type !== "file" ? (
             <div key={key}>
               <span style={{ color: `#${message.color}` }}>
                 {message.username}
               </span>
               : {message.message}
+            </div>
+          ) : (
+            <div key={key}>
+              <span style={{ color: `#${message.color}` }}>
+                {message.username}
+              </span>
+              :{" "}
+              <img
+                src={`https://ipfs.io/ipfs/${message.hash}`}
+                alt="sending pic"
+              />
             </div>
           );
         })}
