@@ -90,6 +90,7 @@ function App(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log();
     const type = file ? "file" : "text";
     //* Publich message to channel
     if (type === "file") {

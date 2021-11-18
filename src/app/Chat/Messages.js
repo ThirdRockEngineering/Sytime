@@ -16,15 +16,17 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
 
   useEffect(() => {
     (async () => {
-      setMessages(
-        (await fetchHistory()).filter((message) => message.channel === channel)
-      );
+      setMessages([
+        ...messages.filter((message) => message.channel === channel),
+        (await fetchHistory()).filter((message) => message.channel === channel),
+      ]);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
       setMessages(
+        ...messages.filter((message) => message.channel === channel),
         (await fetchHistory()).filter((message) => message.channel === channel)
       );
     })();
