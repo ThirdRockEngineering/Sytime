@@ -13,7 +13,7 @@ import EditProfile from "./User/editProfile";
 import Messages from "./Chat/Messages";
 import Peers from "./Chat/Peers";
 import Channels from "./Chat/Channels";
-
+import TypeMessage from "./Chat/TypeMessage";
 //* Hooks
 import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
 import { textAlign } from "@mui/system";
@@ -102,27 +102,23 @@ function App({ profile, readProfile, haveAccount }) {
         await ipfs.pubsub.publish(
           "example_topic",
           //* As I sad - stringified JSON
-          profile.name ? (
-            JSON.stringify({
-              username: profile.name,
-              value,
-              color,
-              channel,
-              type,
-              hash: hash.path,
-            })
-          ) : (
-            JSON.stringify({
-              username: `Anonymous(${username})`,
-              value,
-              color,
-              channel,
-              type,
-              hash: hash.path,
-            })
-          )
-
-
+          profile.name
+            ? JSON.stringify({
+                username: profile.name,
+                value,
+                color,
+                channel,
+                type,
+                hash: hash.path,
+              })
+            : JSON.stringify({
+                username: `Anonymous(${username})`,
+                value,
+                color,
+                channel,
+                type,
+                hash: hash.path,
+              })
         );
         setFile(null);
       };
@@ -130,23 +126,21 @@ function App({ profile, readProfile, haveAccount }) {
       await ipfs.pubsub.publish(
         "example_topic",
         //* As I sad - stringified JSON
-        profile.name ? (
-          JSON.stringify({
-            username: profile.name,
-            value,
-            color,
-            channel,
-            type,
-          })
-        ) : (
-          JSON.stringify({
-            username: `Anonymous(${username})`,
-            value,
-            color,
-            channel,
-            type,
-          })
-        )
+        profile.name
+          ? JSON.stringify({
+              username: profile.name,
+              value,
+              color,
+              channel,
+              type,
+            })
+          : JSON.stringify({
+              username: `Anonymous(${username})`,
+              value,
+              color,
+              channel,
+              type,
+            })
       );
     }
   };
@@ -315,36 +309,17 @@ function App({ profile, readProfile, haveAccount }) {
               textAlign: "left",
             }}
           >
-            <form onSubmit={handleSubmit}>
-              {profile.name ? (
-                <Typography variant="body1">
-                  Name: {profile.name}
-                </Typography>
-              ) : (
-                <label>
-                Name:
-                <input
-                  style={{ height: "20px" }}
-                  type="text"
-                  value={username}
-                  onChange={handleChangeUsername}
-                />
-              </label>
-              )}
-
-              <br></br>
-              Message:
-              <input
-                style={{ width: "75%", height: "30px" }}
-                id="textfield"
-                onChange={handleChange}
-                value={value}
-                type="text"
-                onDrop={handleDrop}
-                onDrag={handleDrag}
-              />
-              <button style={{ height: "30px" }}>Send message</button>
-            </form>
+            <TypeMessage
+              value={value}
+              setValue={setValue}
+              setUsername={setUsername}
+              file={file}
+              ipfs={ipfs}
+              username={username}
+              color={color}
+              setFile={setFile}
+              channel={channel}
+            />
           </Box>
         </Box>
       </Box>
