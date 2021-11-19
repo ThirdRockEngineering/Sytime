@@ -7,6 +7,8 @@ const TypeMessage = ({
   username,
   color,
   channel,
+  account,
+  id,
   setUsername,
   setFile,
   setValue,
@@ -41,6 +43,9 @@ const TypeMessage = ({
                 value,
                 color,
                 channel,
+                account: account,
+                name: username,
+                id,
                 type,
                 hash: hash.path,
               })
@@ -49,6 +54,9 @@ const TypeMessage = ({
                 value,
                 color,
                 channel,
+                account: account,
+                name: username,
+                id,
                 type,
                 hash: hash.path,
               })
@@ -63,6 +71,9 @@ const TypeMessage = ({
           ? JSON.stringify({
               username: profile.name,
               value,
+              account: account,
+              name: username,
+              id,
               color,
               channel,
               type,
@@ -71,6 +82,9 @@ const TypeMessage = ({
               username: `Anonymous(${username})`,
               value,
               color,
+              account: account,
+              name: username,
+              id,
               channel,
               type,
             })
