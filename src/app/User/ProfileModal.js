@@ -30,9 +30,11 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
 
   return (
     <div>
+      <Button onClick={handleOpen}>
+        {haveAccount ? ('View Profile'):('Create Profile')}
+        </Button>
       {haveAccount ? (
         <>
-      <Button onClick={handleOpen}>View Profile</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -67,10 +69,21 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
         </>
       ) : (
         <>
-        <Typography variant="h4">
-        Create profile
-        </Typography>
-        <EditProfile profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
+        <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-profile"
+        aria-describedby="modal-modal-viewDescription"
+      >
+        <Box sx={style}>
+          <Typography variant="h4">
+          Create profile
+          </Typography>
+
+          <EditProfile profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
+          </Box>
+        </Modal>
+
         </>
       )}
     </div>
