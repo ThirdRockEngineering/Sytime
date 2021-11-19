@@ -18,9 +18,10 @@ function ProfileLoader() {
     })();
   }, []);
   console.log("profile loader", profile);
+  console.log(profile);
 
   async function readProfile() {
-    try{
+    try {
       const address = await connect();
       if (address) {
         const data = await fetchProfile(address);
@@ -29,8 +30,8 @@ function ProfileLoader() {
           setHaveAccount(true);
         }
       }
-    } catch(err) {
-      alert('Ethereum account not connected', err)
+    } catch (err) {
+      alert("Ethereum account not connected", err);
     }
   }
 

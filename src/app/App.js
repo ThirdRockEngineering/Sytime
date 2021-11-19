@@ -20,6 +20,15 @@ import { textAlign } from "@mui/system";
 
 function App({ profile, readProfile, haveAccount }) {
   //* Current message that displays in textarea
+  let haveAcc = haveAccount;
+
+  if (!haveAccount) {
+    profile = {};
+    haveAcc = true;
+  }
+  if (!profile.avatar) {
+    profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
+  }
   const [value, setValue] = useState("Hello World!");
 
   //* Your current message that you've just sent
@@ -179,12 +188,15 @@ function App({ profile, readProfile, haveAccount }) {
               </p>
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
-              {haveAccount ? (
+              {haveAcc ? (
                 <>
                   <p>Your Profile Name: {profile.name}</p>
                   <p>
                     Your Profile avatar:{" "}
-                    <img alt="avatar" src={profile.avatar} />
+                    <img
+                      alt="avatar"
+                      src={`https://ipfs.io/ipfs/${profile.avatar}`}
+                    />
                   </p>
                   <p>Your Profile description: {profile.description}</p>
                 </>
