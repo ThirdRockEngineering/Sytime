@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
 import { setProfile } from '../../ceramicProfile/profile'
 
-const EditProfile = (props) => {
+const EditProfile = ({ haveAccount, readProfile, profile, setEdit }) => {
 
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState(''); //link for now
   const [description, setDescription] = useState('');
-  const { haveAccount, readProfile, profile } = props
+
 
   async function setAccount () {
     const data = {name, avatar, description}
     await setProfile(data, haveAccount)
+    if(setEdit) {
+      setEdit()
+    }
     await readProfile()
   }
   useEffect(()=>{

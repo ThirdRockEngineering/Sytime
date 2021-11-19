@@ -191,7 +191,7 @@ function App({ profile, readProfile, haveAccount }) {
               </p>
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
-              <ProfileModal profile={profile} haveAccount={haveAccount} />
+              <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
               {/* {haveAcc ? (
                 <>
                   <p>Your Profile Name: {profile.name}</p>

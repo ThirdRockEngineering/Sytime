@@ -7,14 +7,19 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  height: '50%',
+  width: '50%',
   bgcolor: 'background.paper',
   border: '2px solid #000',
+  borderRadius: "20px",
   boxShadow: 24,
   p: 4,
+  textAlign: "center",
+  overflow: "auto"
 };
 
-export default function ProfileModal({profile, haveAccount}) {
+export default function ProfileModal({profile, haveAccount, readProfile}) {
+  const [edit, setEdit] = useState(false)
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,16 +40,28 @@ export default function ProfileModal({profile, haveAccount}) {
         aria-describedby="modal-modal-viewDescription"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-profile" variant="h6" component="h2">
-            {profile.name}
+          <Typography id="modal-modal-profile" variant="h5" component="h2">
+          Profile
           </Typography>
+          <br></br>
           <Divider />
           <br></br>
-           <img alt="profileAvatar" src={profile.avatar} />
+          <Typography variant="h6">
+            {profile.name}
+          </Typography>
+          <br></br>
+           <img height="150px" alt="profileAvatar" src={profile.avatar} />
           <br></br>
           <Typography id="modal-modal-viewDescription" sx={{ mt: 2 }}>
+            Description:
+            <br></br>
             {profile.description}
           </Typography>
+          <br></br><br></br>
+          {edit ? (<EditProfile profile={profile} haveAccount={haveAccount} readProfile={readProfile} setEdit={setEdit} />) : (<></>)}
+          <Button onClick={()=> setEdit(!edit)}>
+            {edit ? ('Cancel') : ('Edit')}
+          </Button>
         </Box>
       </Modal>
         </>
@@ -53,7 +70,7 @@ export default function ProfileModal({profile, haveAccount}) {
         <Typography variant="h4">
         Create profile
         </Typography>
-        <EditProfile profile={profile} haveAccount={haveAccount} />
+        <EditProfile profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
         </>
       )}
     </div>
