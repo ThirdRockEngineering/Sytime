@@ -18,7 +18,7 @@ import TypeMessage from "./Chat/TypeMessage";
 import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
 import { textAlign } from "@mui/system";
 
-function App({ profile, readProfile, haveAccount }) {
+function App({ profile, readProfile, haveAccount, account }) {
   //* Current message that displays in textarea
   let haveAcc = haveAccount;
 
@@ -41,13 +41,7 @@ function App({ profile, readProfile, haveAccount }) {
   const [file, setFile] = useState(null);
 
   //* Web3 stuff
-  const [ipfs, web3, id, username, setUsername, color] = useWeb3(
-    setChannels,
-    echo
-  );
-
-  //* Ethereum wallet
-  const [account] = useName(web3);
+  const [ipfs, id, username, setUsername, color] = useWeb3(setChannels, echo);
 
   //BasicProfile
 

@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 //* await them in different file :(
 //* check getWeb3.js and ipfs.js
 import node from "../../decent_network/ipfs";
-import _web3 from "../../decent_network/getWeb3";
+import getWeb3 from "../../decent_network/getWeb3";
 
 export const useName = (web3) => {
+  console.log("from hooks", web3);
   const [account, setAccount] = useState(
     "You are not connected to your ethereum wallet"
   );
@@ -56,7 +57,6 @@ export const useChannels = (echo) => {
 
 export const useWeb3 = (setChannels, echo) => {
   const [ipfs, setIpfs] = useState(null);
-  const [web3, setWeb3] = useState(null);
   const [id, setId] = useState("");
   const [username, setUsername] = useState("");
   const [color, setColor] = useState(
@@ -66,8 +66,8 @@ export const useWeb3 = (setChannels, echo) => {
   //* Await all promises
   useEffect(() => {
     (async () => {
+      const web3 = await getWeb3;
       const _ipfs = await node;
-      const web3 = await _web3;
       const acc = (await web3.eth.getAccounts())[0];
       let newPeer = "new peer";
       //* ipfs node
@@ -77,7 +77,6 @@ export const useWeb3 = (setChannels, echo) => {
         setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
       }
       //* connection to wallet via web3
-      setWeb3(web3);
 
       //* Your id
 
@@ -103,5 +102,5 @@ export const useWeb3 = (setChannels, echo) => {
     })();
   }, []);
 
-  return [ipfs, web3, id, username, setUsername, color];
+  return [ipfs, id, username, setUsername, color];
 };

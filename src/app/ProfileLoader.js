@@ -2,7 +2,7 @@ import App from "./App";
 import { useEffect, useState } from "react";
 import { connect, fetchProfile } from "../ceramicProfile/profile";
 
-function ProfileLoader() {
+function ProfileLoader(props) {
   const [profile, setProfile] = useState({});
   const [haveAccount, setHaveAccount] = useState(false);
 
@@ -17,8 +17,7 @@ function ProfileLoader() {
       await readProfile();
     })();
   }, []);
-  console.log("profile loader", profile);
-  console.log(profile);
+  console.log(props.web3);
 
   async function readProfile() {
     try {
@@ -37,6 +36,7 @@ function ProfileLoader() {
 
   return (
     <App
+      account={props.account}
       profile={profile}
       haveAccount={haveAccount}
       readProfile={readProfile}
