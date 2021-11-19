@@ -18,7 +18,7 @@ import Channels from "./Chat/Channels";
 import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
 import { textAlign } from "@mui/system";
 
-function App(props) {
+function App({ profile, readProfile, haveAccount }) {
   //* Current message that displays in textarea
   const [value, setValue] = useState("Hello World!");
 
@@ -41,7 +41,6 @@ function App(props) {
   const [account] = useName(web3);
 
   //BasicProfile
-  const [profile, setProfile] = useState(props.profile);
 
   //* Color of your username that displays in chat
 
@@ -103,14 +102,27 @@ function App(props) {
         await ipfs.pubsub.publish(
           "example_topic",
           //* As I sad - stringified JSON
-          JSON.stringify({
-            username,
-            value,
-            color,
-            channel,
-            type,
-            hash: hash.path,
-          })
+          profile.name ? (
+            JSON.stringify({
+              username: profile.name,
+              value,
+              color,
+              channel,
+              type,
+              hash: hash.path,
+            })
+          ) : (
+            JSON.stringify({
+              username: `Anonymous(${username})`,
+              value,
+              color,
+              channel,
+              type,
+              hash: hash.path,
+            })
+          )
+
+
         );
         setFile(null);
       };
@@ -118,13 +130,23 @@ function App(props) {
       await ipfs.pubsub.publish(
         "example_topic",
         //* As I sad - stringified JSON
-        JSON.stringify({
-          username,
-          value,
-          color,
-          channel,
-          type,
-        })
+        profile.name ? (
+          JSON.stringify({
+            username: profile.name,
+            value,
+            color,
+            channel,
+            type,
+          })
+        ) : (
+          JSON.stringify({
+            username: `Anonymous(${username})`,
+            value,
+            color,
+            channel,
+            type,
+          })
+        )
       );
     }
   };
@@ -162,8 +184,6 @@ function App(props) {
       }
     }
   };
-
-  console.log(props);
 
   return (
     <>
@@ -265,14 +285,14 @@ function App(props) {
               </p>
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
-              {props.haveAccount ? (
+              {haveAccount ? (
                 <>
-                  <p>Your Profile Name: {props.profile.name}</p>
+                  <p>Your Profile Name: {profile.name}</p>
                   <p>
                     Your Profile avatar:{" "}
-                    <img alt="avatar" src={props.profile.avatar} />
+                    <img alt="avatar" src={profile.avatar} />
                   </p>
-                  <p>Your Profile description: {props.profile.description}</p>
+                  <p>Your Profile description: {profile.description}</p>
                 </>
               ) : (
                 <>
@@ -280,9 +300,9 @@ function App(props) {
                 </>
               )}
               <EditProfile
-                readProfile={props.readProfile}
-                haveAccount={props.haveAccount}
-                profile={props.profile}
+                readProfile={readProfile}
+                haveAccount={haveAccount}
+                profile={profile}
               />
             </Box>
           </Box>
@@ -296,7 +316,12 @@ function App(props) {
             }}
           >
             <form onSubmit={handleSubmit}>
-              <label>
+              {profile.name ? (
+                <Typography variant="body1">
+                  Name: {profile.name}
+                </Typography>
+              ) : (
+                <label>
                 Name:
                 <input
                   style={{ height: "20px" }}
@@ -305,6 +330,8 @@ function App(props) {
                   onChange={handleChangeUsername}
                 />
               </label>
+              )}
+
               <br></br>
               Message:
               <input
