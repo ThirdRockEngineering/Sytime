@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import { connect, fetchProfile } from "../ceramicProfile/profile";
 
 function ProfileLoader() {
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState({
+    name: 'Anonymous',
+    description: '',
+    avatar: 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'
+  });
   const [haveAccount, setHaveAccount] = useState(false);
 
   useEffect(() => {
@@ -26,6 +30,7 @@ function ProfileLoader() {
       if (address) {
         const data = await fetchProfile(address);
         if (data) {
+          console.log('Data here', data)
           setProfile(data);
           setHaveAccount(true);
         }

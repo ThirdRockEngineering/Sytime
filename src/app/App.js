@@ -17,18 +17,21 @@ import TypeMessage from "./Chat/TypeMessage";
 //* Hooks
 import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
 import { textAlign } from "@mui/system";
+import ProfileModal from "./User/ProfileModal";
 
 function App({ profile, readProfile, haveAccount }) {
   //* Current message that displays in textarea
-  let haveAcc = haveAccount;
+  // let haveAcc = haveAccount;
 
-  if (!haveAccount) {
-    profile = {};
-    haveAcc = true;
-  }
-  if (!profile.avatar) {
-    profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
-  }
+  // if (!haveAccount) {
+  //   profile = {};
+  //   haveAcc = true;
+  // }
+  // if (!profile.avatar) {
+  //   profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
+  // }
+  console.log('have?', haveAccount)
+
   const [value, setValue] = useState("Hello World!");
 
   //* Your current message that you've just sent
@@ -188,7 +191,8 @@ function App({ profile, readProfile, haveAccount }) {
               </p>
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
-              {haveAcc ? (
+              <ProfileModal profile={profile} haveAccount={haveAccount} />
+              {/* {haveAcc ? (
                 <>
                   <p>Your Profile Name: {profile.name}</p>
                   <p>
@@ -209,7 +213,7 @@ function App({ profile, readProfile, haveAccount }) {
                 readProfile={readProfile}
                 haveAccount={haveAccount}
                 profile={profile}
-              />
+              /> */}
             </Box>
           </Box>
           <Box
