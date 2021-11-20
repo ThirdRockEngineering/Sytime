@@ -17,7 +17,10 @@ const Channels = ({
     if (Object.keys(channel).length) {
       const stringArray = Object.keys(channel)[0].split("-");
       const string = stringArray[1] + "-" + stringArray[0];
-      if (!Object.keys(channels).includes(string)) {
+      if (
+        !Object.keys(channels).includes(string) &&
+        !Object.keys(channels).includes(channel)
+      ) {
         setChannels({ ...channels, ...channel });
         updateProfileState(
           {
