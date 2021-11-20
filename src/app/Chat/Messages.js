@@ -20,6 +20,7 @@ const Messages = ({
   echo,
   account,
   username,
+  profile,
   peer,
 }) => {
   //* List of all messages
@@ -49,6 +50,7 @@ const Messages = ({
           channel: "example_topic",
           type: "text",
           account: account,
+          profile,
         })
       );
     })();
@@ -79,6 +81,7 @@ const Messages = ({
             color: message.color,
             account: message.account,
             id: message.id,
+            profile: message.profile,
             type: message.type === "file" ? "file" : "text",
             hash: message.hash ? message.hash : undefined,
           },
@@ -94,6 +97,7 @@ const Messages = ({
             message: message.message,
             username: message.username,
             channel: message.channel,
+            profile: message.profile,
             color: message.color,
             account: message.account,
             id: message.id,
@@ -109,6 +113,7 @@ const Messages = ({
               message: message.message,
               username: message.username,
               channel: message.channel,
+              profile: message.profile,
               color: message.color,
               account: message.account,
               id: message.id,
