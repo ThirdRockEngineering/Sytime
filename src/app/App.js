@@ -270,12 +270,13 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
             <Grid item
             className="InputContainer"
             xs={12}
+            p={1}
             sx={{
               minHeight:"10vh",
               flex:"1 1 auto",
               position: "sticky",
               bottom: "0",
-              backgroundColor:"white"
+              backgroundColor:"#C9CAD8"
             }}>
               <TypeMessage
                 value={value}
