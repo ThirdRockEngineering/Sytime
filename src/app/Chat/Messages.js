@@ -10,7 +10,15 @@ import {
 //* we only can upload files to web3.storage
 //* this will convert .json to File
 
-const Messages = ({ channel, ipfs, message, setPeers }) => {
+const Messages = ({
+  channel,
+  ipfs,
+  message,
+  peers,
+  account,
+  username,
+  peer,
+}) => {
   //* List of all messages
   const [messages, setMessages] = useState([]);
 
@@ -42,6 +50,8 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
             username: message.username,
             channel: message.channel,
             color: message.color,
+            account: message.account,
+            id: message.id,
             type: message.type === "file" ? "file" : "text",
             hash: message.hash ? message.hash : undefined,
           },
@@ -49,11 +59,10 @@ const Messages = ({ channel, ipfs, message, setPeers }) => {
         //* I know - it's bad sync all peers every time message is thrown
         //* It's just for now
         //* It will not display you on your end (idk why)
-        setPeers(await ipfs.pubsub.peers("example_topic"));
 
         //* Upload history to web3.storage
+
         const _messages = await fetchHistory();
-        console.log("YES HERE", message);
         _messages.push(message);
         const file = makeFileObject(_messages);
         await storeWithProgress([file]);
