@@ -8,7 +8,7 @@ import { makeFileObject } from "./Utils/filemaker";
 import { fetchProfile, setProfile } from "../ceramicProfile/profile";
 import node from "../decent_network/ipfs";
 
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper, Grid } from "@mui/material";
 
 //* Components
 
@@ -101,7 +101,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
     <>
       <Box
       sx={{
-        minHeight:"100vh"
+        Height:"100vh"
       }}
       >
       <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)"
@@ -210,21 +210,22 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
             display: "flex",
             flexDirection: "column",
             backgroundColor:"#FCFDFF",
-
+            maxHeight:"calc(90vh - 50px)"
           }}
         >
-          <Box
-          className="MessageContainer"
-          display="grid" gridTemplateColumns="repeat(12, 1fr)">
-            <Box
-              className="Chat"
-              gridColumn="span 12"
+          <Grid container
+           justifyContent="space-between"
+          sx={{
+            height:"100%",
+          }}>
+              <Grid item
+              xs={12}
               sx={{
-                overflow: "auto",
-                textAlign: "left",
-                height:"calc(85vh - 50px)"
-              }}
-            >
+                flex:"1 1 auto",
+                height:"100%",
+                width:"100%",
+                overflow:"auto"
+              }}>
               <Messages
                 channel={currentChannel.name}
                 message={message}
@@ -237,7 +238,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 peers={peers}
                 peer={peer}
               />
-            </Box>
+              </Grid>
 
             {/* <Box
               className="profile"
@@ -257,20 +258,17 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
 
 
           {/* Bottom */}
-            <Box
-              gridColumn="span 12"
-              className="inputContainer"
-              sx={{
-                height: "15vh",
-                width:"100%",
-                textAlign: "left",
-                position: "relative",
-                bottom: "0",
-                left:"0",
-                backgroundColor:"white"
 
-              }}
-            >
+            <Grid item
+            className="InputContainer"
+            xs={12}
+            sx={{
+              minHeight:"10vh",
+              flex:"1 1 auto",
+              position: "sticky",
+              bottom: "0",
+              backgroundColor:"white"
+            }}>
               <TypeMessage
                 value={value}
                 setValue={setValue}
@@ -285,8 +283,10 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 account={account}
                 id={id}
               />
-            </Box>
-          </Box>
+
+            </Grid>
+          </Grid>
+
         </Box>
 
         <Box className="RightSide"
