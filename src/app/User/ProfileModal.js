@@ -43,7 +43,7 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
 
           <Box gridColumn="span 6">
           <Typography id="modal-modal-profile" variant="h5" component="h2" fontWeight="bolder">
-          Profile
+           {edit ? ('Edit Profile') : ('Profile')}
           </Typography>
           </Box>
           <Box gridColumn="span 6" textAlign="right">
