@@ -27,7 +27,6 @@ export async function fetchProfile(address) {
     )
   } catch(err) {
     console.log("Profile Error:", err)
-    return 'error'
   }
 }
 
