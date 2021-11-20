@@ -4,30 +4,9 @@ import { useState, useEffect } from "react";
 //* await them in different file :(
 //* check getWeb3.js and ipfs.js
 import node from "../../decent_network/ipfs";
-import _web3 from "../../decent_network/getWeb3";
+import getWeb3 from "../../decent_network/getWeb3";
 
-export const useName = (web3) => {
-  const [account, setAccount] = useState(
-    "You are not connected to your ethereum wallet"
-  );
-
-  //* Setting up Ethereum wallet
-  useEffect(() => {
-    (async () => {
-      if (web3) {
-        const acc = (await web3.eth.getAccounts())[0];
-        if (acc) {
-          setAccount(acc);
-          //* Make it shorter
-        }
-      }
-    })();
-  }, [web3]);
-
-  return [account];
-};
-
-export const useChannels = (echo) => {
+export const useChannels = (echo, account) => {
   const [channels, setChannels] = useState([]);
 
   //* Subscribe to yourself
@@ -41,7 +20,7 @@ export const useChannels = (echo) => {
             //* We are storing stringified JSON in message
             const message = JSON.parse(Buffer(msg.data).toString());
             //* Change message from state
-            await ipfs.pubsub.subscribe(`${id}-${message.id}`, echo);
+            await ipfs.pubsub.subscribe(`${account}-${message.account}`, echo);
             setChannels(await ipfs.pubsub.ls());
           }
         });
@@ -54,11 +33,9 @@ export const useChannels = (echo) => {
   return [channels, setChannels];
 };
 
-export const useWeb3 = (setChannels, echo) => {
+export const useWeb3 = (setChannels, echo, account) => {
   const [ipfs, setIpfs] = useState(null);
-  const [web3, setWeb3] = useState(null);
   const [id, setId] = useState("");
-  const [username, setUsername] = useState("");
   const [color, setColor] = useState(
     Math.floor(Math.random() * 16777215).toString(16)
   );
@@ -66,18 +43,16 @@ export const useWeb3 = (setChannels, echo) => {
   //* Await all promises
   useEffect(() => {
     (async () => {
+      const web3 = await getWeb3;
       const _ipfs = await node;
-      const web3 = await _web3;
       const acc = (await web3.eth.getAccounts())[0];
       let newPeer = "new peer";
       //* ipfs node
       setIpfs(_ipfs);
       if (acc) {
         newPeer = acc.slice(0, 4) + "..." + acc.slice(-4);
-        setUsername(acc.slice(0, 4) + "..." + acc.slice(-4));
       }
       //* connection to wallet via web3
-      setWeb3(web3);
 
       //* Your id
 
@@ -85,7 +60,7 @@ export const useWeb3 = (setChannels, echo) => {
       setId(_id);
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
-
+      console.log(account);
       setTimeout(async () => {
         await _ipfs.pubsub.publish(
           "example_topic",
@@ -96,6 +71,7 @@ export const useWeb3 = (setChannels, echo) => {
             id: _id,
             channel: "example_topic",
             type: "text",
+            account: account,
           })
         );
       }, 3000);
@@ -103,5 +79,5 @@ export const useWeb3 = (setChannels, echo) => {
     })();
   }, []);
 
-  return [ipfs, web3, id, username, setUsername, color];
+  return [ipfs, id, color];
 };

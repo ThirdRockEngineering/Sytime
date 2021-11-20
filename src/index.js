@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./public/CSS/index.css";
-import App from "./app/App";
 import reportWebVitals from "./testing_reporting/reportWebVitals";
-import ProfileLoader from './app/ProfileLoader'
+import RequireWallet from "./app/RequireWallet";
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <ProfileLoader />
+    <RequireWallet />
   </React.StrictMode>,
   document.getElementById("root")
 );

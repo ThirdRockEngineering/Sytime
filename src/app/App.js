@@ -6,6 +6,8 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { makeFileObject } from "./Utils/filemaker";
 
+import node from "../decent_network/ipfs";
+
 import { Box, Typography } from "@mui/material";
 
 //* Components
@@ -15,11 +17,11 @@ import Peers from "./Chat/Peers";
 import Channels from "./Chat/Channels";
 import TypeMessage from "./Chat/TypeMessage";
 //* Hooks
-import { useName, useChannels, useWeb3 } from "./Hooks/appHooks";
+import { useChannels, useWeb3 } from "./Hooks/appHooks";
 import { textAlign } from "@mui/system";
 import ProfileModal from "./User/ProfileModal";
 
-function App({ profile, readProfile, haveAccount }) {
+function App({ profile, readProfile, haveAccount, account }) {
   //* Current message that displays in textarea
   // let haveAcc = haveAccount;
 
@@ -38,26 +40,23 @@ function App({ profile, readProfile, haveAccount }) {
   const [message, setMessage] = useState({});
 
   //* List of connected peers
-  const [peers, setPeers] = useState([]);
+  const [peers, setPeers] = useState({});
+  const [peer, setPeer] = useState({});
   const [channel, setChannel] = useState("example_topic");
-  const [channels, setChannels] = useChannels(echo);
+  const [channels, setChannels] = useChannels(echo, account);
   const [file, setFile] = useState(null);
 
   //* Web3 stuff
-  const [ipfs, web3, id, username, setUsername, color] = useWeb3(
-    setChannels,
-    echo
+  const [ipfs, id, color] = useWeb3(setChannels, echo, account);
+  const [username, setUsername] = useState(
+    account.slice(0, 4) + "..." + account.slice(-4)
   );
-
-  //* Ethereum wallet
-  const [account] = useName(web3);
-
   //BasicProfile
 
   //* Color of your username that displays in chat
 
   //* callback when someone publishi in channel
-  function echo(msg) {
+  async function echo(msg) {
     //* We have date here, but we don't use it now
     const d = new Date();
     let time = d.getTime();
@@ -66,6 +65,7 @@ function App({ profile, readProfile, haveAccount }) {
     if (Buffer(msg.data).toString().length) {
       //* We are storing stringified JSON in message
       const message = JSON.parse(Buffer(msg.data).toString());
+      console.log("from echo", message);
       if (message.type === "text") {
         //* Change message from state
         setMessage({
@@ -88,6 +88,16 @@ function App({ profile, readProfile, haveAccount }) {
           hash: message.hash,
         });
       }
+
+      const obj = {};
+
+      obj[`${message.account}`] = {
+        id: message.id,
+        username: message.username,
+        account: message.account,
+      };
+
+      setPeer(obj);
     }
   }
 
@@ -140,12 +150,15 @@ function App({ profile, readProfile, haveAccount }) {
           >
             <Peers
               peers={peers}
+              peer={peer}
+              setPeers={setPeers}
               id={id}
               self={username}
               ipfs={ipfs}
               color={color}
               echo={echo}
               setChannels={setChannels}
+              account={account}
             />
           </Box>
         </Box>
@@ -175,6 +188,10 @@ function App({ profile, readProfile, haveAccount }) {
                 message={message}
                 ipfs={ipfs}
                 setPeers={setPeers}
+                account={account}
+                username={username}
+                peers={peers}
+                peer={peer}
               />
             </Box>
 
@@ -236,6 +253,8 @@ function App({ profile, readProfile, haveAccount }) {
               setFile={setFile}
               channel={channel}
               profile={profile}
+              account={account}
+              id={id}
             />
           </Box>
         </Box>
