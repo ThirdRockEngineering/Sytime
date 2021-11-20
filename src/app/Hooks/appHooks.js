@@ -6,8 +6,11 @@ import { useState, useEffect } from "react";
 import node from "../../decent_network/ipfs";
 import getWeb3 from "../../decent_network/getWeb3";
 
-export const useChannels = (echo, account) => {
-  const [channels, setChannels] = useState({});
+export const useChannels = (echo, account, setChannel, profile) => {
+  console.log("from hooking", profile.channels, profile);
+  const [channels, setChannels] = useState(
+    profile.channels ? profile.channels : {}
+  );
 
   //* Subscribe to yourself
   useEffect(() => {
@@ -21,15 +24,14 @@ export const useChannels = (echo, account) => {
             const message = JSON.parse(Buffer(msg.data).toString());
             //* Change message from state
             await ipfs.pubsub.subscribe(`${account}-${message.account}`, echo);
-            console.log(account, message);
             //* ls method will list all channel you are connected to
             const obj = {};
-            console.log(message);
-            obj[`${message.account}-${account}`] = {
+            obj[`${account}-${message.account}`] = {
               peerName: message.username,
               peerAcc: message.account,
+              name: `${account}-${message.account}`,
             };
-            setChannels({ ...channels, ...obj });
+            setChannel(obj);
           }
         });
       }
@@ -66,7 +68,6 @@ export const useWeb3 = (setChannels, echo, account, channels) => {
       setId(_id);
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
-      console.log(account);
       setTimeout(async () => {
         await _ipfs.pubsub.publish(
           "example_topic",
@@ -82,11 +83,15 @@ export const useWeb3 = (setChannels, echo, account, channels) => {
         );
       }, 3000);
     })();
-    console.log("from useState", channels);
     const obj = {};
-    obj[`${account}`] = { peerName: "example_topic", peerAcc: account };
-    console.log(obj);
-    setChannels({ ...channels, ...obj });
+    obj[`${account}`] = {
+      peerName: "example_topic",
+      peerAcc: account,
+      name: "example_topic",
+    };
+    if (!Object.keys(channels).includes(account)) {
+      setChannels({ ...channels, ...obj });
+    }
   }, []);
 
   return [ipfs, id, color];

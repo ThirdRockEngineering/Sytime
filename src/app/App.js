@@ -5,12 +5,13 @@ import React, { useEffect, useState } from "react";
 import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { makeFileObject } from "./Utils/filemaker";
-
+import { setProfile } from "../ceramicProfile/profile";
 import node from "../decent_network/ipfs";
 
 import { Box, Typography } from "@mui/material";
 
 //* Components
+
 import EditProfile from "./User/editProfile";
 import Messages from "./Chat/Messages";
 import Peers from "./Chat/Peers";
@@ -24,7 +25,6 @@ import ProfileModal from "./User/ProfileModal";
 function App({ profile, readProfile, haveAccount, account }) {
   //* Current message that displays in textarea
   // let haveAcc = haveAccount;
-
   // if (!haveAccount) {
   //   profile = {};
   //   haveAcc = true;
@@ -32,7 +32,7 @@ function App({ profile, readProfile, haveAccount, account }) {
   // if (!profile.avatar) {
   //   profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
   // }
-  console.log("have?", haveAccount);
+  // console.log("have?", haveAccount);
 
   const [value, setValue] = useState("Hello World!");
 
@@ -42,8 +42,18 @@ function App({ profile, readProfile, haveAccount, account }) {
   //* List of connected peers
   const [peers, setPeers] = useState({});
   const [peer, setPeer] = useState({});
-  const [channel, setChannel] = useState("example_topic");
-  const [channels, setChannels] = useChannels(echo, account);
+  const [currentChannel, setCurrentChannel] = useState({
+    peerName: "example_topic",
+    peerAcc: account,
+    name: "example_topic",
+  });
+  const [channel, setChannel] = useState({});
+  const [channels, setChannels] = useChannels(
+    echo,
+    account,
+    setChannel,
+    profile
+  );
   const [file, setFile] = useState(null);
 
   //* Web3 stuff
@@ -135,10 +145,13 @@ function App({ profile, readProfile, haveAccount, account }) {
           >
             <Channels
               channels={channels}
-              currentChannel={channel}
+              currentChannel={currentChannel}
               self={id}
               ipfs={ipfs}
-              setChannel={setChannel}
+              profile={profile}
+              channel={channel}
+              setChannels={setChannels}
+              setChannel={setCurrentChannel}
             />
           </Box>
           <Box
@@ -157,8 +170,9 @@ function App({ profile, readProfile, haveAccount, account }) {
               ipfs={ipfs}
               color={color}
               echo={echo}
-              setChannels={setChannels}
+              setChannel={setChannel}
               account={account}
+              profile={profile}
             />
           </Box>
         </Box>
@@ -184,7 +198,7 @@ function App({ profile, readProfile, haveAccount, account }) {
               }}
             >
               <Messages
-                channel={channel}
+                channel={currentChannel.name}
                 message={message}
                 ipfs={ipfs}
                 setPeers={setPeers}
@@ -251,7 +265,7 @@ function App({ profile, readProfile, haveAccount, account }) {
               username={username}
               color={color}
               setFile={setFile}
-              channel={channel}
+              channel={currentChannel.name}
               profile={profile}
               account={account}
               id={id}

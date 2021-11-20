@@ -8,10 +8,11 @@ const Peers = ({
   ipfs,
   color,
   echo,
-  setChannels,
+  setChannel,
   account,
   channels,
   peer,
+  profile,
   setPeers,
 }) => {
   useEffect(() => {
@@ -39,8 +40,9 @@ const Peers = ({
                   color={color}
                   channels={channels}
                   echo={echo}
-                  setChannels={setChannels}
+                  setChannel={setChannel}
                   account={account}
+                  profile={profile}
                 />
               </div>
             );

@@ -1,8 +1,20 @@
 import React from "react";
 
+import { setProfile } from "../../ceramicProfile/profile";
+
 const Peer = (props) => {
-  const { peer, self, ipfs, color, setChannels, echo, id, account, channels } =
-    props;
+  const {
+    peer,
+    self,
+    ipfs,
+    color,
+    setChannel,
+    echo,
+    id,
+    account,
+    channels,
+    profile,
+  } = props;
 
   async function connectWithPeer() {
     //* Subscribe to another peer's channel
@@ -14,14 +26,14 @@ const Peer = (props) => {
           !_channels.includes(`${peer.account}-${account}`) &&
           !_channels.includes(`${account}-${peer.account}`)
         ) {
-          console.log(peer.account, account);
           await ipfs.pubsub.subscribe(`${peer.account}-${account}`, echo);
           const obj = {};
           obj[`${peer.account}-${account}`] = {
             peerName: peer.username,
             peerAcc: peer.account,
+            name: `${peer.account}-${account}`,
           };
-          setChannels({ ...channels, ...obj });
+          setChannel(obj);
         }
         //* And immediately unsubscribe after new channel created
         await ipfs.pubsub.unsubscribe(peer.id);

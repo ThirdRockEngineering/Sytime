@@ -4,12 +4,12 @@ import { setProfile } from "../../ceramicProfile/profile";
 const Channel = (props) => {
   const { channel, self, ipfs, currentChannel, setChannel } = props;
 
-  return channel === currentChannel ? (
+  return channel.peerName === currentChannel.peerName ? (
     <div>
       <button>
         <strong
           onClick={() => {
-            setChannel(channel.peerName);
+            setChannel(channel);
           }}
         >
           {channel.peerName}
@@ -20,7 +20,7 @@ const Channel = (props) => {
     <div>
       <button
         onClick={() => {
-          setChannel(channel.peerName);
+          setChannel(channel);
         }}
       >
         {channel.peerName}

@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Channel from "./Channel";
+import { setProfile } from "../../ceramicProfile/profile";
 
-const Channels = ({ channels, currentChannel, ipfs, id, setChannel }) => {
+const Channels = ({
+  channels,
+  currentChannel,
+  ipfs,
+  id,
+  setChannel,
+  channel,
+  setChannels,
+  profile,
+}) => {
+  useEffect(() => {
+    setChannels({ ...channels, ...channel });
+    setProfile({ ...profile, channels: { ...channels, ...channel } }, true);
+  }, [channel]);
+
   return (
     <div>
       <h3>Channels</h3>
