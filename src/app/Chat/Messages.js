@@ -24,24 +24,33 @@ const Messages = ({
 
   useEffect(() => {
     (async () => {
-      setMessages(
+      let history = [
         ...messages.filter((message) => message.channel === channel),
-        (await fetchHistory()).filter((message) => message.channel === channel)
-      );
+        (await fetchHistory()).filter((message) => message.channel === channel),
+      ];
+      if (Array.isArray(history[0])) {
+        history = history[0];
+      }
+      setMessages(history);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      setMessages(
+      let history = [
         ...messages.filter((message) => message.channel === channel),
-        (await fetchHistory()).filter((message) => message.channel === channel)
-      );
+        (await fetchHistory()).filter((message) => message.channel === channel),
+      ];
+      if (Array.isArray(history[0])) {
+        history = history[0];
+      }
+      setMessages(history);
     })();
   }, [channel]);
 
   useEffect(() => {
     (async () => {
+      console.log("messages", message.channel, channel);
       if (message.message && message.channel === channel) {
         setMessages([
           ...messages,

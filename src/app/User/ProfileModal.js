@@ -22,8 +22,7 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  if(!haveAccount){
-
+  if (!haveAccount) {
   }
 
   return (
