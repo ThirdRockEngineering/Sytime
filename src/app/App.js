@@ -8,7 +8,7 @@ import { makeFileObject } from "./Utils/filemaker";
 import { fetchProfile, setProfile } from "../ceramicProfile/profile";
 import node from "../decent_network/ipfs";
 
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper, Grid } from "@mui/material";
 
 //* Components
 
@@ -99,16 +99,24 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
 
   return (
     <>
-      <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)">
+      <Box
+      sx={{
+        Height:"100vh"
+      }}
+      >
+      <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)"
+      >
 
         {/* Top Nav */}
+
         <Box
           component={Paper}
           className="Sytime"
           gridColumn="span 2"
           square={true}
           sx={{
-            backgroundColor:"#E3E3F2"
+            backgroundColor:"#E3E3F2",
+            maxHeight:"50px"
           }}
         >
           <Typography
@@ -126,13 +134,21 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           square={true}
           p={1}
           sx={{
-            backgroundColor:"#C9CAD8"
+            backgroundColor:"#C9CAD8",
+            maxHeight:"35px",
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center",
+
           }}
           >
-           <Typography variant="h6" textAlign="left" fontWeight="lighter"
+           <Typography variant="body2" textAlign="left" fontWeight="lighter"
+           fontSize="18px"
            sx={{
              backgroundColor:"white",
-             borderRadius:"5px"
+             borderRadius:"5px",
+             width:"100%",
+             maxHeight:"30px"
            }}>
             {`#${currentChannel.name}`}
           </Typography>
@@ -145,7 +161,8 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           square={true}
           p={1}
           sx={{
-            backgroundColor:"#E3E3F2"
+            backgroundColor:"#E3E3F2",
+            maxHeight:"50px"
           }}
         >
         <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
@@ -161,7 +178,8 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#EEEDE7"
+            backgroundColor: "#EEEDE7",
+            height:"calc(100vh - 50px)"
           }}
         >
           {/* <Box component={Paper} square={true}>
@@ -173,7 +191,6 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           <Box
             className="Channels"
             sx={{
-              height: "20vw",
               overflow: "auto",
             }}
           >
@@ -199,20 +216,24 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            backgroundColor:"#FCFDFF"
+            backgroundColor:"#FCFDFF",
+            maxHeight:"calc(90vh - 50px)"
           }}
         >
-          <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
-            <Box
-              className="Chat"
-              gridColumn="span 7"
+          <Grid container
+           justifyContent="space-between"
+          sx={{
+            height:"100%",
+          }}>
+              <Grid item
+              xs={12}
               sx={{
-                minHeight: "20vw",
-                maxHeight: "40vw",
-                overflow: "auto",
-                textAlign: "left",
-              }}
-            >
+                flex:"1 1 auto",
+                height:"100%",
+                width:"100%",
+                overflow:"auto",
+                textAlign:"left"
+              }}>
               <Messages
                 channel={currentChannel.name}
                 message={message}
@@ -225,9 +246,9 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 peers={peers}
                 peer={peer}
               />
-            </Box>
+              </Grid>
 
-            <Box
+            {/* <Box
               className="profile"
               p={2}
               gridColumn="span 5"
@@ -241,33 +262,39 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
 
-            </Box>
-          </Box>
+            </Box> */}
+
 
           {/* Bottom */}
-          <Box
-            className="input"
-            p={3}
+
+            <Grid item
+            className="InputContainer"
+            xs={12}
             sx={{
-              minHeight: "10vw",
-              textAlign: "left",
-            }}
-          >
-            <TypeMessage
-              value={value}
-              setValue={setValue}
-              setUsername={setUsername}
-              file={file}
-              ipfs={ipfs}
-              username={username}
-              color={color}
-              setFile={setFile}
-              channel={currentChannel.name}
-              profile={profile}
-              account={account}
-              id={id}
-            />
-          </Box>
+              minHeight:"10vh",
+              flex:"1 1 auto",
+              position: "sticky",
+              bottom: "0",
+              backgroundColor:"white"
+            }}>
+              <TypeMessage
+                value={value}
+                setValue={setValue}
+                setUsername={setUsername}
+                file={file}
+                ipfs={ipfs}
+                username={username}
+                color={color}
+                setFile={setFile}
+                channel={currentChannel.name}
+                profile={profile}
+                account={account}
+                id={id}
+              />
+
+            </Grid>
+          </Grid>
+
         </Box>
 
         <Box className="RightSide"
@@ -301,6 +328,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           </Box>
         </Box>
 
+      </Box>
       </Box>
     </>
   );

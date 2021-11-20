@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Box, Button, Typography, Modal, Divider, Paper, TextField, InputBase, IconButton} from "@mui/material"
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const TypeMessage = ({
   value,
@@ -88,6 +90,7 @@ const TypeMessage = ({
               type,
             })
       );
+      setValue('')
     }
   };
 
@@ -126,7 +129,30 @@ const TypeMessage = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+    <Divider />
+
+      <Paper component="form" onSubmit={handleSubmit} p={4}
+      sx={{ p: '10px 20px', display: 'flex', alignItems: 'center'}}>
+
+        <InputBase
+          value={value}
+          placeholder="Enter Message here"
+          onChange={handleChange}
+          type="text"
+          onDrop={handleDrop}
+          onDrag={handleDrag}
+          multiline
+          maxRows={10}
+          fullWidth
+        />
+        <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+        <IconButton type="submit" sx={{p:"5px"}}>
+          <ArrowUpwardIcon />
+        </IconButton>
+      </Paper>
+
+    {/* <form onSubmit={handleSubmit}>
       <label>
         Name:
         <input
@@ -148,7 +174,8 @@ const TypeMessage = ({
         onDrag={handleDrag}
       />
       <button style={{ height: "30px" }}>Send message</button>
-    </form>
+    </form> */}
+    </>
   );
 };
 
