@@ -6,11 +6,11 @@ const Channels = ({ channels, currentChannel, ipfs, id, setChannel }) => {
     <div>
       <h3>Channels</h3>
       <ul>
-        {channels.map((_channel, key) => {
+        {Object.keys(channels).map((_channel, key) => {
           return (
             <div key={key}>
               <Channel
-                channel={_channel}
+                channel={channels[_channel]}
                 currentChannel={currentChannel}
                 self={id}
                 ipfs={ipfs}

@@ -10,6 +10,7 @@ const Peers = ({
   echo,
   setChannels,
   account,
+  channels,
   peer,
   setPeers,
 }) => {
@@ -19,7 +20,6 @@ const Peers = ({
         setPeers({ ...peers, ...peer });
       }
     })();
-    console.log(peer, "from Peers");
   }, [peer]);
 
   return (
@@ -37,6 +37,7 @@ const Peers = ({
                   self={username}
                   ipfs={ipfs}
                   color={color}
+                  channels={channels}
                   echo={echo}
                   setChannels={setChannels}
                   account={account}

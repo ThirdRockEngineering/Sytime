@@ -32,7 +32,7 @@ function App({ profile, readProfile, haveAccount, account }) {
   // if (!profile.avatar) {
   //   profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
   // }
-  console.log('have?', haveAccount)
+  console.log("have?", haveAccount);
 
   const [value, setValue] = useState("Hello World!");
 
@@ -47,7 +47,7 @@ function App({ profile, readProfile, haveAccount, account }) {
   const [file, setFile] = useState(null);
 
   //* Web3 stuff
-  const [ipfs, id, color] = useWeb3(setChannels, echo, account);
+  const [ipfs, id, color] = useWeb3(setChannels, echo, account, channels);
   const [username, setUsername] = useState(
     account.slice(0, 4) + "..." + account.slice(-4)
   );
@@ -65,7 +65,6 @@ function App({ profile, readProfile, haveAccount, account }) {
     if (Buffer(msg.data).toString().length) {
       //* We are storing stringified JSON in message
       const message = JSON.parse(Buffer(msg.data).toString());
-      console.log("from echo", message);
       if (message.type === "text") {
         //* Change message from state
         setMessage({
@@ -151,9 +150,10 @@ function App({ profile, readProfile, haveAccount, account }) {
             <Peers
               peers={peers}
               peer={peer}
+              channels={channels}
               setPeers={setPeers}
               id={id}
-              self={username}
+              username={username}
               ipfs={ipfs}
               color={color}
               echo={echo}

@@ -7,7 +7,7 @@ import node from "../../decent_network/ipfs";
 import getWeb3 from "../../decent_network/getWeb3";
 
 export const useChannels = (echo, account) => {
-  const [channels, setChannels] = useState([]);
+  const [channels, setChannels] = useState({});
 
   //* Subscribe to yourself
   useEffect(() => {
@@ -21,11 +21,17 @@ export const useChannels = (echo, account) => {
             const message = JSON.parse(Buffer(msg.data).toString());
             //* Change message from state
             await ipfs.pubsub.subscribe(`${account}-${message.account}`, echo);
-            setChannels(await ipfs.pubsub.ls());
+            console.log(account, message);
+            //* ls method will list all channel you are connected to
+            const obj = {};
+            console.log(message);
+            obj[`${message.account}-${account}`] = {
+              peerName: message.username,
+              peerAcc: message.account,
+            };
+            setChannels({ ...channels, ...obj });
           }
         });
-        //* ls method will list all channel you are connected to
-        setChannels(await ipfs.pubsub.ls());
       }
     })();
   }, []);
@@ -33,7 +39,7 @@ export const useChannels = (echo, account) => {
   return [channels, setChannels];
 };
 
-export const useWeb3 = (setChannels, echo, account) => {
+export const useWeb3 = (setChannels, echo, account, channels) => {
   const [ipfs, setIpfs] = useState(null);
   const [id, setId] = useState("");
   const [color, setColor] = useState(
@@ -75,8 +81,12 @@ export const useWeb3 = (setChannels, echo, account) => {
           })
         );
       }, 3000);
-      setChannels(await _ipfs.pubsub.ls());
     })();
+    console.log("from useState", channels);
+    const obj = {};
+    obj[`${account}`] = { peerName: "example_topic", peerAcc: account };
+    console.log(obj);
+    setChannels({ ...channels, ...obj });
   }, []);
 
   return [ipfs, id, color];
