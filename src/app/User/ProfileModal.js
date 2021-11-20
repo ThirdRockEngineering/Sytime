@@ -106,11 +106,11 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
         aria-describedby="modal-modal-viewDescription"
       >
         <Box sx={style}>
-          <Typography variant="h4">
+          <Typography variant="h6 ">
           Create profile
           </Typography>
 
-          <EditProfile profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
+          <EditProfile profile={profile} haveAccount={haveAccount} readProfile={readProfile} handleClose={handleClose} />
           </Box>
         </Modal>
 

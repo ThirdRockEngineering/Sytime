@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { setProfile } from '../../ceramicProfile/profile'
 import { Box, Button, Typography, Modal, Divider, Paper, TextField} from "@mui/material"
-const EditProfile = ({ haveAccount, readProfile, profile, setEdit }) => {
+
+
+const EditProfile = ({ haveAccount, readProfile, profile, setEdit, handleClose }) => {
 
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState(''); //link for now
@@ -53,6 +55,7 @@ const EditProfile = ({ haveAccount, readProfile, profile, setEdit }) => {
       <TextField label="Description" value={description} onChange={e => setDescription(e.target.value)} fullWidth multiline={true} />
       <br></br><br></br>
       <Button type="submit" fullWidth variant="outlined">Save Changes</Button>
+      {!haveAccount ? (<Button color="secondary" fullWidth onClick={handleClose}>Cancel</Button>) : (<></>)}
     </Box>
 
     // <div className="UpdateProfile">
