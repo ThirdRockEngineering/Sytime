@@ -7,14 +7,17 @@ import {
   fetchHistory,
 } from "../../decent_network/web3Storage";
 
+import node from "../../decent_network/ipfs";
+
 //* we only can upload files to web3.storage
 //* this will convert .json to File
 
 const Messages = ({
   channel,
-  ipfs,
   message,
+  color,
   peers,
+  echo,
   account,
   username,
   peer,
@@ -32,6 +35,22 @@ const Messages = ({
         history = history[0];
       }
       setMessages(history);
+      const ipfs = await node;
+      if (!(await ipfs.pubsub.ls()).includes("example_topic")) {
+        await ipfs.pubsub.subscribe("example_topic", echo);
+      }
+      await ipfs.pubsub.publish(
+        "example_topic",
+        JSON.stringify({
+          username,
+          value: "is joined",
+          color,
+          id: peer.id,
+          channel: "example_topic",
+          type: "text",
+          account: account,
+        })
+      );
     })();
   }, []);
 
@@ -50,7 +69,6 @@ const Messages = ({
 
   useEffect(() => {
     (async () => {
-      console.log("messages", message.channel, channel);
       if (message.message && message.channel === channel) {
         setMessages([
           ...messages,
@@ -70,11 +88,39 @@ const Messages = ({
         //* It will not display you on your end (idk why)
 
         //* Upload history to web3.storage
-
-        const _messages = await fetchHistory();
-        _messages.push(message);
-        const file = makeFileObject(_messages);
-        await storeWithProgress([file]);
+        const _messages = [
+          ...messages,
+          {
+            message: message.message,
+            username: message.username,
+            channel: message.channel,
+            color: message.color,
+            account: message.account,
+            id: message.id,
+            type: message.type === "file" ? "file" : "text",
+            hash: message.hash ? message.hash : undefined,
+          },
+        ];
+        const fetching = await fetchHistory();
+        if (fetching.length + 1 > _messages.length) {
+          const file = makeFileObject([
+            ...fetching,
+            {
+              message: message.message,
+              username: message.username,
+              channel: message.channel,
+              color: message.color,
+              account: message.account,
+              id: message.id,
+              type: message.type === "file" ? "file" : "text",
+              hash: message.hash ? message.hash : undefined,
+            },
+          ]);
+          await storeWithProgress([file]);
+        } else {
+          const file = makeFileObject(_messages);
+          await storeWithProgress([file]);
+        }
       }
     })();
   }, [message]);

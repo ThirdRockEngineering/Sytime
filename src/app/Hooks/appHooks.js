@@ -68,20 +68,6 @@ export const useWeb3 = (setChannels, echo, account, channels) => {
       setId(_id);
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
-      setTimeout(async () => {
-        await _ipfs.pubsub.publish(
-          "example_topic",
-          JSON.stringify({
-            username: newPeer,
-            value: "is joined",
-            color,
-            id: _id,
-            channel: "example_topic",
-            type: "text",
-            account: account,
-          })
-        );
-      }, 3000);
     })();
     const obj = {};
     obj[`${account}`] = {

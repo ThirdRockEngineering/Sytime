@@ -230,6 +230,8 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 channel={currentChannel.name}
                 message={message}
                 ipfs={ipfs}
+                echo={echo}
+                color={color}
                 setPeers={setPeers}
                 account={account}
                 username={username}
