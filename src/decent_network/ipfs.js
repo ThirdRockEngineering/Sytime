@@ -21,6 +21,9 @@ const main = async () => {
         ],
       },
     },
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
   });
   return ipfs;
 };

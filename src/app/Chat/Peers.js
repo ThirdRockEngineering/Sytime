@@ -8,9 +8,11 @@ const Peers = ({
   ipfs,
   color,
   echo,
-  setChannels,
+  setChannel,
   account,
+  channels,
   peer,
+  profile,
   setPeers,
 }) => {
   useEffect(() => {
@@ -19,7 +21,6 @@ const Peers = ({
         setPeers({ ...peers, ...peer });
       }
     })();
-    console.log(peer, "from Peers");
   }, [peer]);
 
   return (
@@ -37,9 +38,11 @@ const Peers = ({
                   self={username}
                   ipfs={ipfs}
                   color={color}
+                  channels={channels}
                   echo={echo}
-                  setChannels={setChannels}
+                  setChannel={setChannel}
                   account={account}
+                  profile={profile}
                 />
               </div>
             );

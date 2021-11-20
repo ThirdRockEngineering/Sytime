@@ -6,9 +6,12 @@ import { useState, useEffect } from "react";
 import node from "../../decent_network/ipfs";
 import getWeb3 from "../../decent_network/getWeb3";
 
-export const useChannels = (echo, account) => {
-  const [channels, setChannels] = useState([]);
+export const useChannels = (echo, account, setChannel, profile) => {
+  const [channels, setChannels] = useState(profile.channels);
 
+  useEffect(() => {
+    setChannels({ ...channels, ...profile.channels });
+  }, [profile]);
   //* Subscribe to yourself
   useEffect(() => {
     (async () => {
@@ -21,11 +24,16 @@ export const useChannels = (echo, account) => {
             const message = JSON.parse(Buffer(msg.data).toString());
             //* Change message from state
             await ipfs.pubsub.subscribe(`${account}-${message.account}`, echo);
-            setChannels(await ipfs.pubsub.ls());
+            //* ls method will list all channel you are connected to
+            const obj = {};
+            obj[`${account}-${message.account}`] = {
+              peerName: message.username,
+              peerAcc: message.account,
+              name: `${account}-${message.account}`,
+            };
+            setChannel(obj);
           }
         });
-        //* ls method will list all channel you are connected to
-        setChannels(await ipfs.pubsub.ls());
       }
     })();
   }, []);
@@ -33,7 +41,7 @@ export const useChannels = (echo, account) => {
   return [channels, setChannels];
 };
 
-export const useWeb3 = (setChannels, echo, account) => {
+export const useWeb3 = (setChannels, echo, account, channels) => {
   const [ipfs, setIpfs] = useState(null);
   const [id, setId] = useState("");
   const [color, setColor] = useState(
@@ -60,7 +68,6 @@ export const useWeb3 = (setChannels, echo, account) => {
       setId(_id);
       //* Subscribe your browser to topic
       await _ipfs.pubsub.subscribe("example_topic", echo);
-      console.log(account);
       setTimeout(async () => {
         await _ipfs.pubsub.publish(
           "example_topic",
@@ -75,8 +82,16 @@ export const useWeb3 = (setChannels, echo, account) => {
           })
         );
       }, 3000);
-      setChannels(await _ipfs.pubsub.ls());
     })();
+    const obj = {};
+    obj[`${account}`] = {
+      peerName: "example_topic",
+      peerAcc: account,
+      name: "example_topic",
+    };
+    if (!Object.keys(channels).includes(account)) {
+      setChannels({ ...channels, ...obj });
+    }
   }, []);
 
   return [ipfs, id, color];

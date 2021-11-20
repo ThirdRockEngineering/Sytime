@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { setProfile } from "../../ceramicProfile/profile";
 
 const Channel = (props) => {
   const { channel, self, ipfs, currentChannel, setChannel } = props;
 
-  return channel === currentChannel ? (
+  return channel.peerName === currentChannel.peerName ? (
     <div>
       <button>
         <strong
@@ -11,7 +12,7 @@ const Channel = (props) => {
             setChannel(channel);
           }}
         >
-          {channel}
+          {channel.peerName}
         </strong>
       </button>
     </div>
@@ -22,7 +23,7 @@ const Channel = (props) => {
           setChannel(channel);
         }}
       >
-        {channel}
+        {channel.peerName}
       </button>
     </div>
   );

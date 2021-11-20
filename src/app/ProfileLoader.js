@@ -7,7 +7,8 @@ function ProfileLoader(props) {
     name: "Anonymous",
     description: "",
     avatar:
-      "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png",
+      "https://ipfs.io/ipfs/QmZYHnYdmcTYZxAy2FE7LXQumub4Y36zKbUx96YRspWPD5",
+    channels: {},
   });
   const [haveAccount, setHaveAccount] = useState(false);
 
@@ -22,7 +23,7 @@ function ProfileLoader(props) {
       await readProfile();
     })();
   }, []);
-  console.log(props.web3);
+  // console.log(props.web3);
 
   async function readProfile() {
     try {
@@ -46,6 +47,7 @@ function ProfileLoader(props) {
       profile={profile}
       haveAccount={haveAccount}
       readProfile={readProfile}
+      setProfile={setProfile}
     />
   );
 }
