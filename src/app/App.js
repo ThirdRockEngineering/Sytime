@@ -135,13 +135,20 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           p={1}
           sx={{
             backgroundColor:"#C9CAD8",
-            maxHeight:"50px"
+            maxHeight:"35px",
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center",
+
           }}
           >
-           <Typography variant="h6" textAlign="left" fontWeight="lighter"
+           <Typography variant="body2" textAlign="left" fontWeight="lighter"
+           fontSize="18px"
            sx={{
              backgroundColor:"white",
-             borderRadius:"5px"
+             borderRadius:"5px",
+             width:"100%",
+             maxHeight:"30px"
            }}>
             {`#${currentChannel.name}`}
           </Typography>
@@ -224,7 +231,8 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 flex:"1 1 auto",
                 height:"100%",
                 width:"100%",
-                overflow:"auto"
+                overflow:"auto",
+                textAlign:"left"
               }}>
               <Messages
                 channel={currentChannel.name}
