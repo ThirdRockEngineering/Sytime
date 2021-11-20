@@ -106,14 +106,16 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           component={Paper}
           className="Sytime"
           gridColumn="span 2"
+          square={true}
           sx={{
-            borderRadius:"0px"
+            backgroundColor:"#E3E3F2"
           }}
         >
           <Typography
             variant="h5"
             p={1}>
-            Sytime
+            <img src={img} className="App-logo" alt="logo" />
+            {` Sytime `}
           </Typography>
         </Box>
 
@@ -124,7 +126,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           square={true}
           p={1}
           sx={{
-            backgroundColor:"gray"
+            backgroundColor:"#C9CAD8"
           }}
           >
            <Typography variant="h6" textAlign="left" fontWeight="lighter"
@@ -140,34 +142,38 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           component={Paper}
           className="Management"
           gridColumn="span 2"
+          square={true}
           p={1}
           sx={{
-            borderRadius:"0px"
+            backgroundColor:"#E3E3F2"
           }}
         >
         <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
         </Box>
 
 
-
+        {/* Mid Section */}
 
 
         <Box
           className="LeftSide"
-          gridColumn="span 3"
+          gridColumn="span 2"
           sx={{
             display: "flex",
             flexDirection: "column",
+            backgroundColor: "#F1ECE4"
           }}
         >
-          <Box className="logo">
-            <img src={img} className="App-logo" alt="logo" />
-          </Box>
+          {/* <Box component={Paper} square={true}>
+            <Typography variant="h6">
+              Channels
+            </Typography>
+          </Box> */}
 
           <Box
             className="Channels"
             sx={{
-              maxHeight: "10vw",
+              height: "20vw",
               overflow: "auto",
             }}
           >
@@ -183,35 +189,17 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               updateProfileState={setProfile}
             />
           </Box>
-          <Box
-            className="Peers"
-            sx={{
-              overflow: "auto",
-            }}
-          >
-            <Peers
-              peers={peers}
-              peer={peer}
-              channels={channels}
-              setPeers={setPeers}
-              id={id}
-              username={username}
-              ipfs={ipfs}
-              color={color}
-              echo={echo}
-              setChannel={setChannel}
-              account={account}
-              profile={profile}
-            />
-          </Box>
+
+
         </Box>
 
         <Box
-          className="ChatArea"
-          gridColumn="span 9"
+          className="MiddleContainer"
+          gridColumn="span 8"
           sx={{
             display: "flex",
             flexDirection: "column",
+            backgroundColor:"#FCFDFF"
           }}
         >
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
@@ -256,6 +244,8 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
 
             </Box>
           </Box>
+
+          {/* Bottom */}
           <Box
             className="input"
             p={3}
@@ -281,6 +271,38 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
             />
           </Box>
         </Box>
+
+        <Box className="RightSide"
+          gridColumn="span 2"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "#F1ECE4"
+          }}
+        >
+         <Box
+            className="Peers"
+            sx={{
+              overflow: "auto",
+            }}
+          >
+            <Peers
+              peers={peers}
+              peer={peer}
+              channels={channels}
+              setPeers={setPeers}
+              id={id}
+              username={username}
+              ipfs={ipfs}
+              color={color}
+              echo={echo}
+              setChannel={setChannel}
+              account={account}
+              profile={profile}
+            />
+          </Box>
+        </Box>
+
       </Box>
     </>
   );
