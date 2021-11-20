@@ -8,7 +8,7 @@ import { makeFileObject } from "./Utils/filemaker";
 import { fetchProfile, setProfile } from "../ceramicProfile/profile";
 import node from "../decent_network/ipfs";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 
 //* Components
 
@@ -23,16 +23,6 @@ import { textAlign } from "@mui/system";
 import ProfileModal from "./User/ProfileModal";
 
 function App({ profile, readProfile, haveAccount, account, setProfile }) {
-  //* Current message that displays in textarea
-  // let haveAcc = haveAccount;
-  // if (!haveAccount) {
-  //   profile = {};
-  //   haveAcc = true;
-  // }
-  // if (!profile.avatar) {
-  //   profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
-  // }
-  // console.log("have?", haveAccount);
 
   const [value, setValue] = useState("Hello World!");
 
@@ -61,17 +51,6 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
   const [username, setUsername] = useState(
     account.slice(0, 4) + "..." + account.slice(-4)
   );
-  //BasicProfile
-  // useEffect(() => {
-  //   (async () => {
-  //     if (channels.length) {
-  //       console.log("before", profile);
-  //       setProfile(await fetchProfile(account));
-  //       console.log("after", profile);
-  //     }
-  //   })();
-  // }, [channels]);
-  //* Color of your username that displays in chat
 
   //* callback when someone publishi in channel
   async function echo(msg) {
@@ -94,7 +73,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           type: message.type,
         });
       } else {
-        //   //* Also strang
+        // Also string
         setMessage({
           username: message.username,
           message: message.value,
@@ -121,16 +100,57 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
   return (
     <>
       <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)">
+
+        {/* Top Nav */}
         <Box
-          className="NavBar"
-          gridColumn="span 12"
-          p={3}
+          component={Paper}
+          className="Sytime"
+          gridColumn="span 2"
           sx={{
-            border: "1px solid black",
+            borderRadius:"0px"
           }}
         >
-          <Typography variant="h4">Sytime</Typography>
+          <Typography
+            variant="h5"
+            p={1}>
+            Sytime
+          </Typography>
         </Box>
+
+        <Box
+          component={Paper}
+          className="CurrentChannel"
+          gridColumn="span 8"
+          square={true}
+          p={1}
+          sx={{
+            backgroundColor:"gray"
+          }}
+          >
+           <Typography variant="h6" textAlign="left" fontWeight="lighter"
+           sx={{
+             backgroundColor:"white",
+             borderRadius:"5px"
+           }}>
+            {`#${currentChannel.name}`}
+          </Typography>
+        </Box>
+
+        <Box
+          component={Paper}
+          className="Management"
+          gridColumn="span 2"
+          p={1}
+          sx={{
+            borderRadius:"0px"
+          }}
+        >
+        <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
+        </Box>
+
+
+
+
 
         <Box
           className="LeftSide"
@@ -231,29 +251,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               </p>
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
-              <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
-              {/* {haveAcc ? (
-                <>
-                  <p>Your Profile Name: {profile.name}</p>
-                  <p>
-                    Your Profile avatar:{" "}
-                    <img
-                      alt="avatar"
-                      src={`https://ipfs.io/ipfs/${profile.avatar}`}
-                    />
-                  </p>
-                  <p>Your Profile description: {profile.description}</p>
-                </>
-              ) : (
-                <>
-                  <p> No Account connected</p>
-                </>
-              )}
-              <EditProfile
-                readProfile={readProfile}
-                haveAccount={haveAccount}
-                profile={profile}
-              /> */}
+
             </Box>
           </Box>
           <Box
