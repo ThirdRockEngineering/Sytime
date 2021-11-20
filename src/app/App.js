@@ -8,7 +8,7 @@ import { makeFileObject } from "./Utils/filemaker";
 import { fetchProfile, setProfile } from "../ceramicProfile/profile";
 import node from "../decent_network/ipfs";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 
 //* Components
 
@@ -23,16 +23,6 @@ import { textAlign } from "@mui/system";
 import ProfileModal from "./User/ProfileModal";
 
 function App({ profile, readProfile, haveAccount, account, setProfile }) {
-  //* Current message that displays in textarea
-  // let haveAcc = haveAccount;
-  // if (!haveAccount) {
-  //   profile = {};
-  //   haveAcc = true;
-  // }
-  // if (!profile.avatar) {
-  //   profile.avatar = "QmXiYAbTQP4yMbjbNVJc4NyPskY88gwXqSoMPBPHrarGTe";
-  // }
-  // console.log("have?", haveAccount);
 
   const [value, setValue] = useState("Hello World!");
 
@@ -61,17 +51,6 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
   const [username, setUsername] = useState(
     account.slice(0, 4) + "..." + account.slice(-4)
   );
-  //BasicProfile
-  // useEffect(() => {
-  //   (async () => {
-  //     if (channels.length) {
-  //       console.log("before", profile);
-  //       setProfile(await fetchProfile(account));
-  //       console.log("after", profile);
-  //     }
-  //   })();
-  // }, [channels]);
-  //* Color of your username that displays in chat
 
   //* callback when someone publishi in channel
   async function echo(msg) {
@@ -94,7 +73,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           type: message.type,
         });
       } else {
-        //   //* Also strang
+        // Also string
         setMessage({
           username: message.username,
           message: message.value,
@@ -121,33 +100,80 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
   return (
     <>
       <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)">
+
+        {/* Top Nav */}
         <Box
-          className="NavBar"
-          gridColumn="span 12"
-          p={3}
+          component={Paper}
+          className="Sytime"
+          gridColumn="span 2"
+          square={true}
           sx={{
-            border: "1px solid black",
+            backgroundColor:"#E3E3F2"
           }}
         >
-          <Typography variant="h4">Sytime</Typography>
+          <Typography
+            variant="h5"
+            p={1}>
+            <img src={img} className="App-logo" alt="logo" />
+            {` Sytime `}
+          </Typography>
         </Box>
 
         <Box
+          component={Paper}
+          className="CurrentChannel"
+          gridColumn="span 8"
+          square={true}
+          p={1}
+          sx={{
+            backgroundColor:"#C9CAD8"
+          }}
+          >
+           <Typography variant="h6" textAlign="left" fontWeight="lighter"
+           sx={{
+             backgroundColor:"white",
+             borderRadius:"5px"
+           }}>
+            {`#${currentChannel.name}`}
+          </Typography>
+        </Box>
+
+        <Box
+          component={Paper}
+          className="Management"
+          gridColumn="span 2"
+          square={true}
+          p={1}
+          sx={{
+            backgroundColor:"#E3E3F2"
+          }}
+        >
+        <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
+        </Box>
+
+
+        {/* Mid Section */}
+
+
+        <Box
           className="LeftSide"
-          gridColumn="span 3"
+          gridColumn="span 2"
           sx={{
             display: "flex",
             flexDirection: "column",
+            backgroundColor: "#EEEDE7"
           }}
         >
-          <Box className="logo">
-            <img src={img} className="App-logo" alt="logo" />
-          </Box>
+          {/* <Box component={Paper} square={true}>
+            <Typography variant="h6">
+              Channels
+            </Typography>
+          </Box> */}
 
           <Box
             className="Channels"
             sx={{
-              maxHeight: "10vw",
+              height: "20vw",
               overflow: "auto",
             }}
           >
@@ -163,35 +189,17 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               updateProfileState={setProfile}
             />
           </Box>
-          <Box
-            className="Peers"
-            sx={{
-              overflow: "auto",
-            }}
-          >
-            <Peers
-              peers={peers}
-              peer={peer}
-              channels={channels}
-              setPeers={setPeers}
-              id={id}
-              username={username}
-              ipfs={ipfs}
-              color={color}
-              echo={echo}
-              setChannel={setChannel}
-              account={account}
-              profile={profile}
-            />
-          </Box>
+
+
         </Box>
 
         <Box
-          className="ChatArea"
-          gridColumn="span 9"
+          className="MiddleContainer"
+          gridColumn="span 8"
           sx={{
             display: "flex",
             flexDirection: "column",
+            backgroundColor:"#FCFDFF"
           }}
         >
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
@@ -202,7 +210,6 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 minHeight: "20vw",
                 maxHeight: "40vw",
                 overflow: "auto",
-                border: "1px solid black",
                 textAlign: "left",
               }}
             >
@@ -233,37 +240,16 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               </p>
               <p>Your wallet: {account}</p>
               <p>Your peer id: {id}</p>
-              <ProfileModal profile={profile} haveAccount={haveAccount} />
-              {/* {haveAcc ? (
-                <>
-                  <p>Your Profile Name: {profile.name}</p>
-                  <p>
-                    Your Profile avatar:{" "}
-                    <img
-                      alt="avatar"
-                      src={`https://ipfs.io/ipfs/${profile.avatar}`}
-                    />
-                  </p>
-                  <p>Your Profile description: {profile.description}</p>
-                </>
-              ) : (
-                <>
-                  <p> No Account connected</p>
-                </>
-              )}
-              <EditProfile
-                readProfile={readProfile}
-                haveAccount={haveAccount}
-                profile={profile}
-              /> */}
+
             </Box>
           </Box>
+
+          {/* Bottom */}
           <Box
             className="input"
             p={3}
             sx={{
               minHeight: "10vw",
-              border: "1px solid black",
               textAlign: "left",
             }}
           >
@@ -283,6 +269,38 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
             />
           </Box>
         </Box>
+
+        <Box className="RightSide"
+          gridColumn="span 2"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "#EEEDE7"
+          }}
+        >
+         <Box
+            className="Peers"
+            sx={{
+              overflow: "auto",
+            }}
+          >
+            <Peers
+              peers={peers}
+              peer={peer}
+              channels={channels}
+              setPeers={setPeers}
+              id={id}
+              username={username}
+              ipfs={ipfs}
+              color={color}
+              echo={echo}
+              setChannel={setChannel}
+              account={account}
+              profile={profile}
+            />
+          </Box>
+        </Box>
+
       </Box>
     </>
   );
