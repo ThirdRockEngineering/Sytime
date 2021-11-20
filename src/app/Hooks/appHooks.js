@@ -7,11 +7,11 @@ import node from "../../decent_network/ipfs";
 import getWeb3 from "../../decent_network/getWeb3";
 
 export const useChannels = (echo, account, setChannel, profile) => {
-  console.log("from hooking", profile.channels, profile);
-  const [channels, setChannels] = useState(
-    profile.channels ? profile.channels : {}
-  );
+  const [channels, setChannels] = useState(profile.channels);
 
+  useEffect(() => {
+    setChannels({ ...channels, ...profile.channels });
+  }, [profile]);
   //* Subscribe to yourself
   useEffect(() => {
     (async () => {

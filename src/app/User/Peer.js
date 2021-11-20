@@ -26,6 +26,7 @@ const Peer = (props) => {
           !_channels.includes(`${peer.account}-${account}`) &&
           !_channels.includes(`${account}-${peer.account}`)
         ) {
+          console.log(_channels);
           await ipfs.pubsub.subscribe(`${peer.account}-${account}`, echo);
           const obj = {};
           obj[`${peer.account}-${account}`] = {

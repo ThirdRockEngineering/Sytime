@@ -11,10 +11,27 @@ const Channels = ({
   channel,
   setChannels,
   profile,
+  updateProfileState,
 }) => {
   useEffect(() => {
-    setChannels({ ...channels, ...channel });
-    setProfile({ ...profile, channels: { ...channels, ...channel } }, true);
+    if (Object.keys(channel).length) {
+      const stringArray = Object.keys(channel)[0].split("-");
+      const string = stringArray[1] + "-" + stringArray[0];
+      if (!Object.keys(channels).includes(string)) {
+        setChannels({ ...channels, ...channel });
+        updateProfileState(
+          {
+            ...profile,
+            channels: { ...profile.channels, ...{ ...channels, ...channel } },
+          },
+          true
+        );
+        setProfile({
+          ...profile,
+          channels: { ...profile.channels, ...{ ...channels, ...channel } },
+        });
+      }
+    }
   }, [channel]);
 
   return (

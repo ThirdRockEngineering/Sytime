@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { makeFileObject } from "./Utils/filemaker";
-import { setProfile } from "../ceramicProfile/profile";
+import { fetchProfile, setProfile } from "../ceramicProfile/profile";
 import node from "../decent_network/ipfs";
 
 import { Box, Typography } from "@mui/material";
@@ -22,7 +22,7 @@ import { useChannels, useWeb3 } from "./Hooks/appHooks";
 import { textAlign } from "@mui/system";
 import ProfileModal from "./User/ProfileModal";
 
-function App({ profile, readProfile, haveAccount, account }) {
+function App({ profile, readProfile, haveAccount, account, setProfile }) {
   //* Current message that displays in textarea
   // let haveAcc = haveAccount;
   // if (!haveAccount) {
@@ -62,7 +62,15 @@ function App({ profile, readProfile, haveAccount, account }) {
     account.slice(0, 4) + "..." + account.slice(-4)
   );
   //BasicProfile
-
+  // useEffect(() => {
+  //   (async () => {
+  //     if (channels.length) {
+  //       console.log("before", profile);
+  //       setProfile(await fetchProfile(account));
+  //       console.log("after", profile);
+  //     }
+  //   })();
+  // }, [channels]);
   //* Color of your username that displays in chat
 
   //* callback when someone publishi in channel
@@ -152,6 +160,7 @@ function App({ profile, readProfile, haveAccount, account }) {
               channel={channel}
               setChannels={setChannels}
               setChannel={setCurrentChannel}
+              updateProfileState={setProfile}
             />
           </Box>
           <Box
