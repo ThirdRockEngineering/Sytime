@@ -161,7 +161,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#F1ECE4"
+            backgroundColor: "#EEEDE7"
           }}
         >
           {/* <Box component={Paper} square={true}>
@@ -210,7 +210,6 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 minHeight: "20vw",
                 maxHeight: "40vw",
                 overflow: "auto",
-                border: "1px solid black",
                 textAlign: "left",
               }}
             >
@@ -251,7 +250,6 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
             p={3}
             sx={{
               minHeight: "10vw",
-              border: "1px solid black",
               textAlign: "left",
             }}
           >
@@ -277,7 +275,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "#F1ECE4"
+            backgroundColor: "#EEEDE7"
           }}
         >
          <Box
