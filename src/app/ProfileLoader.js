@@ -14,16 +14,10 @@ function ProfileLoader(props) {
 
   useEffect(() => {
     (async () => {
-      // const address = await connect()
-      // if ( address ){
-      //   const data = await fetchProfile(address)
-      //   setProfile(data)
-      //   setHaveAccount(true)
-      // }
       await readProfile();
     })();
   }, []);
-  // console.log(props.web3);
+
 
   async function readProfile() {
     try {
@@ -31,7 +25,6 @@ function ProfileLoader(props) {
       if (address) {
         const data = await fetchProfile(address);
         if (data) {
-          console.log("Data here", data);
           setProfile(data);
           setHaveAccount(true);
         }

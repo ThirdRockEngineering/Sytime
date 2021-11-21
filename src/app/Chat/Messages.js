@@ -144,66 +144,66 @@ const Messages = ({
           const timeStamp = new Date(message.time)
           if(message.message === 'is joined'){
             return (
-            <>
-              <Grid container key={key} p={2}>
-                <Grid item xs={12}>
-                  <Typography fontWeight="bold" sx={{
-                    color: `#${message.color}`
-                  }}>
-                    {`${message.username} has connected!`}
-                  </Typography>
+              <Grid key={key}>
+                <Grid container  p={2}>
+                  <Grid item xs={12}>
+                    <Typography fontWeight="bold" sx={{
+                      color: `#${message.color}`
+                    }}>
+                      {`${message.username} has connected!`}
+                    </Typography>
+                  </Grid>
                 </Grid>
+                <Divider />
               </Grid>
-              <Divider />
-              </>
             )
           }
           else return (
-            <>
-            <Grid container key={key} p={2}>
-              <Grid item xs={1} className="Avatar" alignContent="center"
-              sx={{
-                height:"50px",
-                width:"50px"
-              }}>
-                {message.profile ? (
-                  <Avatar alt="defaultUser" src={message.profile.avatar} sx={{
-                    height:"50px",
-                    width:"50px"
-                  }} />
-                ): (<Avatar alt="defaultUser" src={defaultUser} sx={{
+            <Grid key={key}>
+              <Grid container p={2}>
+                <Grid item xs={1} className="Avatar" alignContent="center"
+                sx={{
                   height:"50px",
                   width:"50px"
-                }} />)}
-              </Grid>
-              <Grid xs={11} item container className="Message" flexDirection="column">
-                <Grid item className="username">
-                  <Typography fontWeight="bold" sx={{
-                    color: `#${message.color}`
-                  }}>
-                    {message.username}
-                  </Typography>
-                    {/* <Typography fontSize="smaller">{timeStamp.toString()}</Typography> */}
+                }}>
+                  {message.profile ? (
+                    <Avatar alt="defaultUser" src={message.profile.avatar} sx={{
+                      height:"50px",
+                      width:"50px"
+                    }} />
+                  ): (<Avatar alt="defaultUser" src={defaultUser} sx={{
+                    height:"50px",
+                    width:"50px"
+                  }} />)}
                 </Grid>
-                {message.type ==="file" ? (
-                <Grid item className="picMessage" p={1}>
-                   <img
-                      src={`https://ipfs.io/ipfs/${message.hash}`}
-                      alt="sending pic"
-                      style={{ maxHeight: "250px", width: "auto" }} />
-                  </Grid>) : (<></>)}
-                <Grid item className="textmessage">
-                  <Typography variant="body2" p={1}>
-                    {message.message}
-                  </Typography>
-                </Grid>
+                <Grid xs={11} item container className="Message" flexDirection="column">
+                  <Grid item className="username">
+                    <Typography fontWeight="bold" sx={{
+                      color: `#${message.color}`
+                    }}>
+                      {message.username}
+                    </Typography>
+                      {/* <Typography fontSize="smaller">{timeStamp.toString()}</Typography> */}
+                  </Grid>
+                  {message.type ==="file" ? (
+                  <Grid item className="picMessage" p={1}>
+                    <img
+                        src={`https://ipfs.io/ipfs/${message.hash}`}
+                        alt="sending pic"
+                        style={{ maxHeight: "250px", width: "auto" }} />
+                    </Grid>) : (<></>)}
+                  <Grid item className="textmessage">
+                    <Typography variant="body2" p={1}>
+                      {message.message}
+                    </Typography>
+                  </Grid>
 
+                </Grid>
               </Grid>
+                  {key !== message.length ? (
+                      <Divider />
+                    ) : (<></>)}
             </Grid>
-            {key !== message.length ? (
-                <Divider />
-              ) : (<></>)}
-            </>
 
           )
 

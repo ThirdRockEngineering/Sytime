@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Box, Button, Typography, Modal, Divider, Paper} from "@mui/material"
+import { Box, Button, Typography, Modal, Paper} from "@mui/material"
 import EditProfile from "./editProfile";
 
 const style = {
@@ -28,7 +28,7 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
   return (
     <div>
       <Button onClick={handleOpen}>
-        {haveAccount ? ('View Profile'):('Create Profile')}
+        {haveAccount ? ('Profile'):('Create Profile')}
         </Button>
       {haveAccount ? (
         <>

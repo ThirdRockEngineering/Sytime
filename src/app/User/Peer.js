@@ -12,8 +12,6 @@ const Peer = (props) => {
     echo,
     id,
     account,
-    channels,
-    profile,
   } = props;
 
   const [name, setName] = useState('')

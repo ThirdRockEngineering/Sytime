@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, Typography, Modal, Divider, Paper, TextField, InputBase, IconButton} from "@mui/material"
+import React from "react";
+import { Divider, Paper, InputBase, IconButton} from "@mui/material"
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const TypeMessage = ({
@@ -20,9 +20,9 @@ const TypeMessage = ({
     setValue(event.target.value);
   };
 
-  const handleChangeUsername = (event) => {
-    setUsername(event.target.value);
-  };
+  // const handleChangeUsername = (event) => {
+  //   setUsername(event.target.value);
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -151,30 +151,6 @@ const TypeMessage = ({
           <ArrowUpwardIcon />
         </IconButton>
       </Paper>
-
-    {/* <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input
-          style={{ height: "20px" }}
-          type="text"
-          value={username}
-          onChange={handleChangeUsername}
-        />
-      </label>
-      <br></br>
-      Message:
-      <input
-        style={{ width: "75%", height: "30px" }}
-        id="textfield"
-        onChange={handleChange}
-        value={value}
-        type="text"
-        onDrop={handleDrop}
-        onDrag={handleDrag}
-      />
-      <button style={{ height: "30px" }}>Send message</button>
-    </form> */}
     </>
   );
 };
