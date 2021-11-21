@@ -131,7 +131,7 @@ const Messages = ({
       }
     })();
   }, [message]);
-  console.log('messages', messages)
+  console.log('messages', profile)
   return (
     <>
       <Box
@@ -163,10 +163,15 @@ const Messages = ({
             <>
             <Grid container key={key} p={2}>
               <Grid item xs={1} className="Avatar" alignContent="center">
-                <Avatar alt="defaultUser" src={defaultUser} sx={{
+                {message.profile ? (
+                  <Avatar alt="defaultUser" src={message.profile.avatar} sx={{
+                    height:"50px",
+                    width:"50px"
+                  }} />
+                ): (<Avatar alt="defaultUser" src={defaultUser} sx={{
                   height:"50px",
                   width:"50px"
-                }} />
+                }} />)}
               </Grid>
               <Grid xs={11} item container className="Message" flexDirection="column">
                 <Grid item className="username">
