@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Box, Button, Typography, Modal, Divider, Paper} from "@mui/material"
+import { Box, Button, Typography, Modal, Paper} from "@mui/material"
 import EditProfile from "./editProfile";
 
 const style = {

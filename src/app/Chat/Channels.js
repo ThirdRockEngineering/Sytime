@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Channel from "./Channel";
 import { setProfile } from "../../ceramicProfile/profile";
 import { Box, Typography, Divider} from "@mui/material";
@@ -90,25 +90,6 @@ const Channels = ({
         })}
         </Box>
     </>
-    // <div>
-    //   <h3>Channels</h3>
-    //   <ul>
-    //     {Object.keys(channels).map((_channel, key) => {
-    //       console.log(_channel)
-    //       return (
-    //         <div key={key}>
-    //           <Channel
-    //             channel={channels[_channel]}
-    //             currentChannel={currentChannel}
-    //             self={id}
-    //             ipfs={ipfs}
-    //             setChannel={setChannel}
-    //           />
-    //         </div>
-    //       );
-    //     })}
-    //   </ul>
-    // </div>
   );
 };
 

@@ -59,31 +59,6 @@ const Peers = ({
       </Box>
     </>
 
-    // <div>
-    //   <h3>Peers</h3>
-    //   <ul>
-    //     {Object.keys(peers)
-    //       .filter((peer) => peer !== account)
-    //       .map((peer, key) => {
-    //         return (
-    //           <div key={key}>
-    //             <Peer
-    //               peer={peers[`${peer}`]}
-    //               id={id}
-    //               self={username}
-    //               ipfs={ipfs}
-    //               color={color}
-    //               channels={channels}
-    //               echo={echo}
-    //               setChannel={setChannel}
-    //               account={account}
-    //               profile={profile}
-    //             />
-    //           </div>
-    //         );
-    //       })}
-    //   </ul>
-    // </div>
   );
 };
 

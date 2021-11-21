@@ -1,12 +1,8 @@
 import img from "../public/image.png";
 import "../public/CSS/App.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { trackPromise, usePromiseTracker } from "react-promise-tracker";
-
-import { makeFileObject } from "./Utils/filemaker";
-import { fetchProfile, setProfile } from "../ceramicProfile/profile";
-import node from "../decent_network/ipfs";
+// import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 import { Box, Typography, Paper, Grid } from "@mui/material";
 
