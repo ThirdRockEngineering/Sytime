@@ -144,8 +144,8 @@ const Messages = ({
           const timeStamp = new Date(message.time)
           if(message.message === 'is joined'){
             return (
-              <Grid>
-                <Grid container key={key} p={2}>
+              <Grid key={key}>
+                <Grid container  p={2}>
                   <Grid item xs={12}>
                     <Typography fontWeight="bold" sx={{
                       color: `#${message.color}`
@@ -159,8 +159,8 @@ const Messages = ({
             )
           }
           else return (
-            <Grid>
-              <Grid container key={key} p={2}>
+            <Grid key={key}>
+              <Grid container p={2}>
                 <Grid item xs={1} className="Avatar" alignContent="center"
                 sx={{
                   height:"50px",

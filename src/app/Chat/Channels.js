@@ -52,7 +52,6 @@ const Channels = ({
       }}>
         {Object.keys(channels).filter((chan)=>channels[chan].peerName==="example_topic")
         .map((_channel, key) => {
-          console.log(_channel)
           return (
             <Box key={key} p={1}>
               <Channel
