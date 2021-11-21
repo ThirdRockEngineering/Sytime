@@ -1,6 +1,6 @@
-import React from "react";
-
-import { setProfile } from "../../ceramicProfile/profile";
+import {useState, useEffect} from "react";
+import { Button } from "@mui/material"
+import { fetchProfile } from "../../ceramicProfile/profile";
 
 const Peer = (props) => {
   const {
@@ -15,6 +15,16 @@ const Peer = (props) => {
     channels,
     profile,
   } = props;
+
+  const [name, setName] = useState('')
+
+  useEffect(() => {
+    (async () => {
+      const peerData = await fetchProfile(peer.account)
+      peerData ? (setName(peerData.name)) : (setName(peer.username))
+
+    })();
+  }, [peer])
 
   async function connectWithPeer() {
     //* Subscribe to another peer's channel
@@ -55,10 +65,11 @@ const Peer = (props) => {
       })
     );
   }
+  console.log(peer)
   return (
-    <div>
-      <button onClick={connectWithPeer}>{peer.username}</button>
-    </div>
+      <Button fullWidth onClick={connectWithPeer}>
+        {name}
+      </Button>
   );
 };
 
