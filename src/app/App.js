@@ -23,7 +23,6 @@ import { textAlign } from "@mui/system";
 import ProfileModal from "./User/ProfileModal";
 
 function App({ profile, readProfile, haveAccount, account, setProfile }) {
-
   const [value, setValue] = useState("Hello World!");
 
   //* Your current message that you've just sent
@@ -71,6 +70,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           channel: message.channel,
           time,
           type: message.type,
+          profile: message.profile,
         });
       } else {
         // Also string
@@ -82,6 +82,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
           time,
           type: message.type,
           hash: message.hash,
+          profile: message.profile,
         });
       }
 
@@ -100,155 +101,163 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
   return (
     <>
       <Box
-      sx={{
-        Height:"100vh"
-      }}
+        sx={{
+          Height: "100vh",
+        }}
       >
-      <Box className="App" display="grid" gridTemplateColumns="repeat(12, 1fr)"
-      >
-
-        {/* Top Nav */}
-
         <Box
-          component={Paper}
-          className="Sytime"
-          gridColumn="span 2"
-          square={true}
-          sx={{
-            backgroundColor:"#E3E3F2",
-            maxHeight:"50px"
-          }}
+          className="App"
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
         >
-          <Typography
-            variant="h5"
-            p={1}>
-            <img src={img} className="App-logo" alt="logo" />
-            {` Sytime `}
-          </Typography>
-        </Box>
+          {/* Top Nav */}
 
-        <Box
-          component={Paper}
-          className="CurrentChannel"
-          gridColumn="span 8"
-          square={true}
-          p={1}
-          sx={{
-            backgroundColor:"#C9CAD8",
-            maxHeight:"35px",
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"center",
-
-          }}
+          <Box
+            component={Paper}
+            className="Sytime"
+            gridColumn="span 2"
+            square={true}
+            sx={{
+              backgroundColor: "#E3E3F2",
+              maxHeight: "50px",
+            }}
           >
-           <Typography variant="body2" textAlign="left" fontWeight="lighter"
-           fontSize="18px"
-           sx={{
-             backgroundColor:"white",
-             borderRadius:"5px",
-             width:"100%",
-             maxHeight:"30px"
-           }}>
-            {`#${currentChannel.name}`}
-          </Typography>
-        </Box>
+            <Typography variant="h5" p={1}>
+              <img src={img} className="App-logo" alt="logo" />
+              {` Sytime `}
+            </Typography>
+          </Box>
 
-        <Box
-          component={Paper}
-          className="Management"
-          gridColumn="span 2"
-          square={true}
-          p={1}
-          sx={{
-            backgroundColor:"#E3E3F2",
-            maxHeight:"50px"
-          }}
-        >
-        <ProfileModal profile={profile} haveAccount={haveAccount} readProfile={readProfile} />
-        </Box>
+          <Box
+            component={Paper}
+            className="CurrentChannel"
+            gridColumn="span 8"
+            square={true}
+            p={1}
+            sx={{
+              backgroundColor: "#C9CAD8",
+              maxHeight: "35px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="body2"
+              textAlign="left"
+              fontWeight="lighter"
+              fontSize="18px"
+              sx={{
+                backgroundColor: "white",
+                borderRadius: "5px",
+                width: "100%",
+                maxHeight: "30px",
+              }}
+            >
+              {`#${currentChannel.name}`}
+            </Typography>
+          </Box>
 
+          <Box
+            component={Paper}
+            className="Management"
+            gridColumn="span 2"
+            square={true}
+            p={1}
+            sx={{
+              backgroundColor: "#E3E3F2",
+              maxHeight: "50px",
+            }}
+          >
+            <ProfileModal
+              profile={profile}
+              haveAccount={haveAccount}
+              readProfile={readProfile}
+            />
+          </Box>
 
-        {/* Mid Section */}
+          {/* Mid Section */}
 
-
-        <Box
-          className="LeftSide"
-          gridColumn="span 2"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#EEEDE7",
-            height:"calc(100vh - 50px)"
-          }}
-        >
-          {/* <Box component={Paper} square={true}>
+          <Box
+            className="LeftSide"
+            gridColumn="span 2"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#EEEDE7",
+              height: "calc(100vh - 50px)",
+            }}
+          >
+            {/* <Box component={Paper} square={true}>
             <Typography variant="h6">
               Channels
             </Typography>
           </Box> */}
 
-          <Box
-            className="Channels"
-            sx={{
-              overflow: "auto",
-            }}
-          >
-            <Channels
-              channels={channels}
-              currentChannel={currentChannel}
-              self={id}
-              ipfs={ipfs}
-              profile={profile}
-              channel={channel}
-              setChannels={setChannels}
-              setChannel={setCurrentChannel}
-              updateProfileState={setProfile}
-            />
+            <Box
+              className="Channels"
+              sx={{
+                overflow: "auto",
+              }}
+            >
+              <Channels
+                channels={channels}
+                currentChannel={currentChannel}
+                self={id}
+                ipfs={ipfs}
+                profile={profile}
+                channel={channel}
+                setChannels={setChannels}
+                setChannel={setCurrentChannel}
+                updateProfileState={setProfile}
+              />
+            </Box>
           </Box>
 
-
-        </Box>
-
-        <Box
-          className="MiddleContainer"
-          gridColumn="span 8"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor:"#FCFDFF",
-            maxHeight:"calc(90vh - 50px)"
-          }}
-        >
-          <Grid container
-           justifyContent="space-between"
-          sx={{
-            height:"100%",
-          }}>
-              <Grid item
-              xs={12}
+          <Box
+            className="MiddleContainer"
+            gridColumn="span 8"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#FCFDFF",
+              maxHeight: "calc(90vh - 50px)",
+            }}
+          >
+            <Grid
+              container
+              justifyContent="space-between"
               sx={{
-                flex:"1 1 auto",
-                height:"100%",
-                width:"100%",
-                overflow:"auto",
-                textAlign:"left"
-              }}>
-              <Messages
-                channel={currentChannel.name}
-                message={message}
-                ipfs={ipfs}
-                echo={echo}
-                color={color}
-                setPeers={setPeers}
-                account={account}
-                username={username}
-                peers={peers}
-                peer={peer}
-              />
+                height: "100%",
+              }}
+            >
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  flex: "1 1 auto",
+                  height: "100%",
+                  width: "100%",
+                  overflow: "auto",
+                  textAlign: "left",
+                }}
+              >
+                <Messages
+                  profile={profile}
+                  channel={currentChannel.name}
+                  message={message}
+                  ipfs={ipfs}
+                  echo={echo}
+                  color={color}
+                  setPeers={setPeers}
+                  account={account}
+                  username={username}
+                  peers={peers}
+                  peer={peer}
+                />
               </Grid>
 
-            {/* <Box
+              {/* <Box
               className="profile"
               p={2}
               gridColumn="span 5"
@@ -264,10 +273,9 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
 
             </Box> */}
 
+              {/* Bottom */}
 
-          {/* Bottom */}
-
-            <Grid item
+              <Grid item
             className="InputContainer"
             xs={12}
             p={1}
@@ -278,58 +286,57 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               bottom: "0",
               backgroundColor:"#C9CAD8"
             }}>
-              <TypeMessage
-                value={value}
-                setValue={setValue}
-                setUsername={setUsername}
-                file={file}
-                ipfs={ipfs}
-                username={username}
-                color={color}
-                setFile={setFile}
-                channel={currentChannel.name}
-                profile={profile}
-                account={account}
-                id={id}
-              />
-
+                <TypeMessage
+                  value={value}
+                  setValue={setValue}
+                  setUsername={setUsername}
+                  file={file}
+                  ipfs={ipfs}
+                  username={username}
+                  color={color}
+                  setFile={setFile}
+                  channel={currentChannel.name}
+                  profile={profile}
+                  account={account}
+                  id={id}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
 
-        </Box>
 
-        <Box className="RightSide"
-          gridColumn="span 2"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#EEEDE7"
-          }}
-        >
-         <Box
-            className="Peers"
+          <Box
+            className="RightSide"
+            gridColumn="span 2"
             sx={{
-              overflow: "auto",
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#EEEDE7",
             }}
           >
-            <Peers
-              peers={peers}
-              peer={peer}
-              channels={channels}
-              setPeers={setPeers}
-              id={id}
-              username={username}
-              ipfs={ipfs}
-              color={color}
-              echo={echo}
-              setChannel={setChannel}
-              account={account}
-              profile={profile}
-            />
+            <Box
+              className="Peers"
+              sx={{
+                overflow: "auto",
+              }}
+            >
+              <Peers
+                peers={peers}
+                peer={peer}
+                channels={channels}
+                setPeers={setPeers}
+                id={id}
+                username={username}
+                ipfs={ipfs}
+                color={color}
+                echo={echo}
+                setChannel={setChannel}
+                account={account}
+                profile={profile}
+              />
+            </Box>
           </Box>
         </Box>
-
-      </Box>
       </Box>
     </>
   );
