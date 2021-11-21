@@ -154,7 +154,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 maxHeight: "30px",
               }}
             >
-              {`#${currentChannel.name}`}
+              {`#${currentChannel.peerName}`}
             </Typography>
           </Box>
 
@@ -188,14 +188,11 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               height: "calc(100vh - 50px)",
             }}
           >
-            {/* <Box component={Paper} square={true}>
-            <Typography variant="h6">
-              Channels
-            </Typography>
-          </Box> */}
+
 
             <Box
               className="Channels"
+              p={1}
               sx={{
                 overflow: "auto",
               }}
@@ -275,18 +272,17 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
 
               {/* Bottom */}
 
-              <Grid
-                item
-                className="InputContainer"
-                xs={12}
-                sx={{
-                  minHeight: "10vh",
-                  flex: "1 1 auto",
-                  position: "sticky",
-                  bottom: "0",
-                  backgroundColor: "white",
-                }}
-              >
+              <Grid item
+            className="InputContainer"
+            xs={12}
+            p={1}
+            sx={{
+              minHeight:"10vh",
+              flex:"1 1 auto",
+              position: "sticky",
+              bottom: "0",
+              backgroundColor:"#C9CAD8"
+            }}>
                 <TypeMessage
                   value={value}
                   setValue={setValue}
@@ -304,6 +300,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               </Grid>
             </Grid>
           </Box>
+
 
           <Box
             className="RightSide"

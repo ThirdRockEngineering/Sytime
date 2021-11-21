@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-
 import CeramicClient from '@ceramicnetwork/http-client'
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
 

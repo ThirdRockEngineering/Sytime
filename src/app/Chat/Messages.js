@@ -7,6 +7,8 @@ import {
   fetchHistory,
 } from "../../decent_network/web3Storage";
 
+import { Box, Typography, Grid, Avatar, Divider } from "@mui/material";
+import defaultUser from "../../public/defaultUser.jpeg"
 import node from "../../decent_network/ipfs";
 
 //* we only can upload files to web3.storage
@@ -129,35 +131,115 @@ const Messages = ({
       }
     })();
   }, [message]);
-
   return (
-    <div>
-      <h3>Messages</h3>
-      <ul>
-        {messages.map((message, key) => {
-          return message.type !== "file" ? (
-            <div key={key}>
-              <span style={{ color: `#${message.color}` }}>
-                {message.username}
-              </span>
-              : {message.message}
-            </div>
-          ) : (
-            <div key={key}>
-              <span style={{ color: `#${message.color}` }}>
-                {message.username}
-              </span>
-              : {message.message}
-              <img
-                src={`https://ipfs.io/ipfs/${message.hash}`}
-                alt="sending pic"
-                style={{ maxHeight: "50px", maxWeight: "50px" }}
-              />
-            </div>
-          );
+    <>
+      <Box
+        className="Messages"
+        p={2}
+        sx={{
+          height:"100%",
+          width:"95%"
+        }}>
+        {messages.map((message, key)=> {
+          const timeStamp = new Date(message.time)
+          if(message.message === 'is joined'){
+            return (
+            <>
+              <Grid container key={key} p={2}>
+                <Grid item xs={12}>
+                  <Typography fontWeight="bold" sx={{
+                    color: `#${message.color}`
+                  }}>
+                    {`${message.username} has connected!`}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Divider />
+              </>
+            )
+          }
+          else return (
+            <>
+            <Grid container key={key} p={2}>
+              <Grid item xs={1} className="Avatar" alignContent="center"
+              sx={{
+                height:"50px",
+                width:"50px"
+              }}>
+                {message.profile ? (
+                  <Avatar alt="defaultUser" src={message.profile.avatar} sx={{
+                    height:"50px",
+                    width:"50px"
+                  }} />
+                ): (<Avatar alt="defaultUser" src={defaultUser} sx={{
+                  height:"50px",
+                  width:"50px"
+                }} />)}
+              </Grid>
+              <Grid xs={11} item container className="Message" flexDirection="column">
+                <Grid item className="username">
+                  <Typography fontWeight="bold" sx={{
+                    color: `#${message.color}`
+                  }}>
+                    {message.username}
+                  </Typography>
+                    {/* <Typography fontSize="smaller">{timeStamp.toString()}</Typography> */}
+                </Grid>
+                {message.type ==="file" ? (
+                <Grid item className="picMessage" p={1}>
+                   <img
+                      src={`https://ipfs.io/ipfs/${message.hash}`}
+                      alt="sending pic"
+                      style={{ maxHeight: "250px", width: "auto" }} />
+                  </Grid>) : (<></>)}
+                <Grid item className="textmessage">
+                  <Typography variant="body2" p={1}>
+                    {message.message}
+                  </Typography>
+                </Grid>
+
+              </Grid>
+            </Grid>
+            {key !== message.length ? (
+                <Divider />
+              ) : (<></>)}
+            </>
+
+          )
+
         })}
-      </ul>
-    </div>
+      </Box>
+    </>
+
+
+
+    // <div>
+    //   <h3>Messages</h3>
+    //   <ul>
+    //     {messages.map((message, key) => {
+    //       return message.type !== "file" ? (
+    //         <div key={key}>
+    //           <span style={{ color: `#${message.color}` }}>
+    //             {message.username}
+    //           </span>
+    //           : {message.message}
+    //         </div>
+    //       ) : (
+    //         <div key={key}>
+    //           <span style={{ color: `#${message.color}` }}>
+    //             {message.username}
+    //           </span>
+    //           : {message.message}
+    //           <img
+    //             src={`https://ipfs.io/ipfs/${message.hash}`}
+    //             alt="sending pic"
+    //             style={{ maxHeight: "50px", maxWeight: "50px" }}
+    //           />
+    //         </div>
+    //       );
+    //     })}
+    //   </ul>
+    // </div>
   );
 };
 
