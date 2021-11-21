@@ -28,7 +28,7 @@ export default function ProfileModal({profile, haveAccount, readProfile}) {
   return (
     <div>
       <Button onClick={handleOpen}>
-        {haveAccount ? ('View Profile'):('Create Profile')}
+        {haveAccount ? ('Profile'):('Create Profile')}
         </Button>
       {haveAccount ? (
         <>

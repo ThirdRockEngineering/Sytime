@@ -31,7 +31,6 @@ function ProfileLoader(props) {
       if (address) {
         const data = await fetchProfile(address);
         if (data) {
-          console.log("Data here", data);
           setProfile(data);
           setHaveAccount(true);
         }

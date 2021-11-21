@@ -8,11 +8,12 @@ const RequireWallet = (props) => {
   const [account, setAccount] = useState(null);
 
   const handleClick = async () => {
-    const web3 = await _web3;
-    setAccount((await web3.eth.getAccounts())[0]);
+    try{
+      const web3 = await _web3;
+      setAccount((await web3.eth.getAccounts())[0]);
+    } catch(err) { alert('No Wallet connected, Please connect your ethereum wallet')}
   };
 
-  console.log(account);
   return account ? (
     <ProfileLoader account={account} />
   ) : (

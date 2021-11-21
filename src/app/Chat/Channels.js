@@ -37,7 +37,6 @@ const Channels = ({
       }
     }
   }, [channel]);
-  console.log(channels)
 
   return (
 
