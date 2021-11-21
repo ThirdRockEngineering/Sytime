@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Channel from "./Channel";
 import { setProfile } from "../../ceramicProfile/profile";
-import { Box, Typography, Paper, Divider} from "@mui/material";
+import { Box, Typography, Divider} from "@mui/material";
 
 const Channels = ({
   channels,

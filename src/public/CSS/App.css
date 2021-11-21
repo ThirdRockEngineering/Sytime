@@ -6,9 +6,15 @@
   height: 20px;
   pointer-events: none;
 }
+.Main-logo {
+  pointer-events: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+  .Main-Logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }

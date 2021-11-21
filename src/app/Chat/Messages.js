@@ -7,7 +7,7 @@ import {
   fetchHistory,
 } from "../../decent_network/web3Storage";
 
-import { Box, Typography, Paper, Grid, Avatar, Divider } from "@mui/material";
+import { Box, Typography, Grid, Avatar, Divider } from "@mui/material";
 import defaultUser from "../../public/defaultUser.jpeg"
 import node from "../../decent_network/ipfs";
 
@@ -131,7 +131,6 @@ const Messages = ({
       }
     })();
   }, [message]);
-  console.log('messages', profile)
   return (
     <>
       <Box

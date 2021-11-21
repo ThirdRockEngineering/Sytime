@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Peer from "../User/Peer";
-import { Box, Typography, Paper, Divider} from "@mui/material";
+import { Box, Typography, Divider} from "@mui/material";
 
 const Peers = ({
   peers,
