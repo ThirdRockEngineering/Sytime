@@ -154,7 +154,7 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
                 maxHeight: "30px",
               }}
             >
-              {`#${currentChannel.name}`}
+              {`#${currentChannel.peerName}`}
             </Typography>
           </Box>
 
@@ -188,14 +188,11 @@ function App({ profile, readProfile, haveAccount, account, setProfile }) {
               height: "calc(100vh - 50px)",
             }}
           >
-            {/* <Box component={Paper} square={true}>
-            <Typography variant="h6">
-              Channels
-            </Typography>
-          </Box> */}
+
 
             <Box
               className="Channels"
+              p={1}
               sx={{
                 overflow: "auto",
               }}

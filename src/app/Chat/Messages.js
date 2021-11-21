@@ -162,7 +162,11 @@ const Messages = ({
           else return (
             <>
             <Grid container key={key} p={2}>
-              <Grid item xs={1} className="Avatar" alignContent="center">
+              <Grid item xs={1} className="Avatar" alignContent="center"
+              sx={{
+                height:"50px",
+                width:"50px"
+              }}>
                 {message.profile ? (
                   <Avatar alt="defaultUser" src={message.profile.avatar} sx={{
                     height:"50px",
