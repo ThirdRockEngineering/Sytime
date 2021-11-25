@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Channel from "./Channel";
 import { setProfile } from "../../ceramicProfile/profile";
-import { Box, Typography, Divider} from "@mui/material";
+import { Box, Typography, Divider } from "@mui/material";
 
 const Channels = ({
   channels,
@@ -39,56 +39,60 @@ const Channels = ({
   }, [channel]);
 
   return (
-
     <>
       <Box>
-        <Typography variant="h6">
-          Channels
-        </Typography>
+        <Typography variant="h6">Channels</Typography>
         <Divider />
       </Box>
-      <Box p={1} sx={{
-        textAlign:"left"
-      }}>
-        {Object.keys(channels).filter((chan)=>channels[chan].peerName==="example_topic")
-        .map((_channel, key) => {
-          return (
-            <Box key={key} p={1}>
-              <Channel
-                channel={channels[_channel]}
-                currentChannel={currentChannel}
-                self={id}
-                ipfs={ipfs}
-                setChannel={setChannel}
-              />
-            </Box>
-          );
-        })}
-        </Box>
-        <Box>
-        <Typography variant="h6">
-          Direct Messages
-        </Typography>
+      <Box
+        p={1}
+        sx={{
+          textAlign: "left",
+        }}
+      >
+        {Object.keys(channels)
+          .filter((chan) => channels[chan].peerName === "example_topic")
+          .map((_channel, key) => {
+            return (
+              <Box key={key} p={1}>
+                <Channel
+                  channel={channels[_channel]}
+                  currentChannel={currentChannel}
+                  self={id}
+                  ipfs={ipfs}
+                  setChannel={setChannel}
+                />
+              </Box>
+            );
+          })}
+      </Box>
+      <Box>
+        <Typography variant="h6">Direct Messages</Typography>
         <Divider />
       </Box>
-      <Box p={1} sx={{
-        textAlign:"left"
-      }}>
-        {Object.keys(channels).filter((chan)=>channels[chan].peerName!=="example_topic").map((_channel, key) => {
-          console.log(_channel)
-          return (
-            <Box key={key} p={1}>
-              <Channel
-                channel={channels[_channel]}
-                currentChannel={currentChannel}
-                self={id}
-                ipfs={ipfs}
-                setChannel={setChannel}
-              />
-            </Box>
-          );
-        })}
-        </Box>
+      <Box
+        p={1}
+        sx={{
+          textAlign: "left",
+        }}
+      >
+        {Object.keys(channels)
+          .filter((chan) => channels[chan].peerName !== "example_topic")
+          .map((_channel, key) => {
+            console.log(_channel);
+            return (
+              <Box key={key} p={1}>
+                <Channel
+                  channel={channels[_channel]}
+                  currentChannel={currentChannel}
+                  self={id}
+                  ipfs={ipfs}
+                  setChannel={setChannel}
+                />
+              </Box>
+            );
+          })}
+      </Box>
     </>
   );
 };
